@@ -1,4 +1,26 @@
-# dotfiles
+# Created by yourself
+
+### Customize Options ###
+# Empty directories
+/logs/*
+/databases/*
+/backups/*
+!.gitkeep
+
+# Sensitive files
+*.private.*
+!*.private.sample.*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# End of yourself
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,vim,pycharm,visualstudiocode
