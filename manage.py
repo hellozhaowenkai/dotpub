@@ -7,6 +7,9 @@ import argparse
 import logging
 
 
+# =======================
+# Constants
+# =======================
 VERSION = "1.0.0"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
@@ -21,6 +24,9 @@ BACKUPS_PATH = ROOT_PATH / BACKUPS_DIRNAME
 FORMULA_INFO_FILENAME = "formula-info.json"
 
 
+# =======================
+# Utils
+# =======================
 def get_target_formulae(args):
     if args.all:
         return SUPPORTED_FORMULAE
@@ -78,6 +84,9 @@ def yield_dotfile(formula):
             }
 
 
+# =======================
+# Mount Command
+# =======================
 def mount_dotfile(custom, system, backup=None):
     logging.info(f"{custom.name}: doing resolve...")
     if system.resolve() == custom:
@@ -140,6 +149,9 @@ def add_mount_parser(subparsers):
     return mount_parser
 
 
+# =======================
+# Unmount Command
+# =======================
 def unmount_dotfile(custom, system, backup=None):
     logging.info(f"{custom.name}: doing resolve...")
     if system.resolve() != custom:
@@ -201,6 +213,81 @@ def add_unmount_parser(subparsers):
     return unmount_parser
 
 
+# =======================
+# Status Command
+# =======================
+def status_dotfile(custom, system, backup=None):
+    print("@", f"dotfile: {custom.name}")
+
+    print("#", f"custom: {custom}")
+    custom_status = "supported"
+    print("#", f"status: {custom_status}")
+
+    print("$", f"system: {system}")
+    if system.is_symlink() or system.is_file():
+        if system.resolve() == custom:
+            system_status = "mounted"
+        else:
+            system_status = "not-mounted"
+    elif system.exists():
+        system_status = "unknown-file"
+    else:
+        system_status = "not-exists"
+    print("$", f"status: {system_status}")
+
+    print("%", f"backup: {backup}")
+    if backup.is_symlink() or backup.is_file():
+        backup_status = "backed-up"
+    elif backup.exists():
+        backup_status = "unknown-file"
+    else:
+        backup_status = "not-exists"
+    print("%", f"status: {backup_status}")
+
+    print("")
+
+
+def status_formula(formula):
+    print("==>", f"{formula}")
+    for config in yield_dotfile(formula):
+        status_dotfile(config["custom"], config["system"], config["backup"])
+    print("")
+
+
+def status_handler(args):
+    formulae = get_target_formulae(args)
+    for formula in formulae:
+        status_formula(formula)
+
+
+def add_status_parser(subparsers):
+    """create the parser for the `status` command"""
+
+    status_parser = subparsers.add_parser(
+        "status",
+        description="Show the manager status info.",
+        help="show the manager status info",
+    )
+    status_parser.add_argument(
+        "formulae",
+        type=str,
+        nargs="*",
+        metavar="formulae",
+        # choices=SUPPORTED_FORMULAE,
+        help="chose the formulae those you want to manage",
+    )
+    status_parser.add_argument(
+        "--all",
+        action="store_true",
+        help="manage all of the formulae those be supported default",
+    )
+    status_parser.set_defaults(func=status_handler)
+    return status_parser
+
+
+# =======================
+# Main
+# =======================
 def init_sub_parser(parser):
     """create the sub-level parser"""
 
@@ -238,6 +325,7 @@ def main():
 
     add_mount_parser(subparsers)
     add_unmount_parser(subparsers)
+    add_status_parser(subparsers)
 
     # parse the args and call whatever function was selected
     args = parser.parse_args()

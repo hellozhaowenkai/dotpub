@@ -13,10 +13,11 @@ def main():
         "python",
         "manage.py",
         # "-v",
-        "mount",
+        # "status",
+        # "mount",
         # "unmount",
-        # "-h",
-        "pip",
+        "-h",
+        # "pip",
         # "--all",
     ]
     run(command).communicate()
