@@ -22,7 +22,25 @@ FORMULA_INFO_FILENAME = "formula-info.json"
 
 
 def get_target_formulae(args):
-    return SUPPORTED_FORMULAE if args.all else args.formulae
+    if args.all:
+        return SUPPORTED_FORMULAE
+
+    elif args.formulae:
+        right, wrong = [], []
+        for formula in args.formulae:
+            container = right if formula in SUPPORTED_FORMULAE else wrong
+            container.append(formula)
+
+        if wrong:
+            logging.error(f"those formulae {wrong} are not supported!")
+
+        return right
+
+    else:
+        logging.error(
+            f"please chose at last one formula from {SUPPORTED_FORMULAE} to manage!"
+        )
+        return []
 
 
 def get_formula_info(info_path):
@@ -110,7 +128,7 @@ def add_mount_parser(subparsers):
         type=str,
         nargs="*",
         metavar="formulae",
-        choices=SUPPORTED_FORMULAE,
+        # choices=SUPPORTED_FORMULAE,
         help="chose the formulae those you want to manage",
     )
     mount_parser.add_argument(
@@ -171,7 +189,7 @@ def add_unmount_parser(subparsers):
         type=str,
         nargs="*",
         metavar="formulae",
-        choices=SUPPORTED_FORMULAE,
+        # choices=SUPPORTED_FORMULAE,
         help="chose the formulae those you want to manage",
     )
     unmount_parser.add_argument(
