@@ -1,0 +1,292 @@
+# ~/.config/starship.toml
+
+# =======================
+# Prompt
+# =======================
+
+# Default prompt format.
+# format = "$all"
+
+# Custom prompt format.
+format = """
+$username\
+$directory\
+\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+\
+$line_break\
+$time\
+$character\
+"""
+
+
+# =======================
+# Enabled Modules
+# =======================
+
+# The `username` module shows active user's username.
+[username]
+# Always shows the username module.
+show_always = true
+# The style used for non-root users.
+style_user = "bold blue"
+
+# The `directory` module shows the path to your current directory, truncated to three parent folders.
+[directory]
+# The number of parent folders that the current directory should be truncated to.
+truncation_length = 0
+# Whether or not to truncate to the root of the git repo that you're currently in.
+truncate_to_repo = false
+
+# The `time` module shows the current local time.
+[time]
+# This module is disabled by default. To enable it, set disabled to false in your configuration file.
+disabled = false
+
+
+# =======================
+# Disabled Modules
+# =======================
+
+# The `aws` module shows the current AWS region and profile.
+[aws]
+disabled = true
+
+# The `battery` module shows how charged the device's battery is and its current charging status.
+[battery]
+disabled = true
+
+# The `character` module shows a character (usually an arrow) beside where the text is entered in your terminal.
+# [character]
+# disabled = true
+
+# The `cmake` module shows the currently installed version of CMake.
+[cmake]
+disabled = true
+
+# The `cmd_duration` module shows how long the last command took to execute.
+[cmd_duration]
+disabled = true
+
+# The `conda` module shows the current conda environment, if $CONDA_DEFAULT_ENV is set.
+[conda]
+disabled = true
+
+# The `crystal` module shows the currently installed version of Crystal.
+[crystal]
+disabled = true
+
+# The `dart` module shows the currently installed version of Dart.
+[dart]
+disabled = true
+
+# The `deno` module shows you your currently installed version of Deno.
+[deno]
+disabled = true
+
+# The `directory` module shows the path to your current directory, truncated to three parent folders.
+# [directory]
+# disabled = true
+
+# The `docker_context` module shows the currently active Docker contextif it's not set to default.
+[docker_context]
+disabled = true
+
+# The `dotnet` module shows the relevant version of the .NET Core SDKfor the current directory.
+[dotnet]
+disabled = true
+
+# The `elixir` module shows the currently installed version of Elixirand Erlang/OTP.
+[elixir]
+disabled = true
+
+# The `elm` module shows the currently installed version of Elm.
+[elm]
+disabled = true
+
+# The `env_var` module displays the current value of a selected environment variable.
+[env_var]
+disabled = true
+
+# The `erlang` module shows the currently installed version of Erlang/OTP.
+[erlang]
+disabled = true
+
+# The `gcloud` module shows the current configuration for gcloudCLI.
+[gcloud]
+disabled = true
+
+# The `git_branch` module shows the active branch of the repo in your current directory.
+# [git_branch]
+# disabled = true
+
+# The `git_commit` module shows the current commit hash and also the tag (if any) of the repo in your current directory.
+# [git_commit]
+# disabled = true
+
+# The `git_state` module will show in directories which are part of a git repository, and where there is an operation in progress, such as: REBASING, BISECTING, etc.
+# [git_state]
+# disabled = true
+
+# The `git_status` module shows symbols representing the state of the repo in your current directory.
+# [git_status]
+# disabled = true
+
+# The `golang` module shows the currently installed version of Golang.
+[golang]
+disabled = true
+
+# The `helm` module shows the currently installed version of Helm.
+[helm]
+disabled = true
+
+# The `hostname` module shows the system hostname.
+[hostname]
+disabled = true
+
+# The `java` module shows the currently installed version of Java.
+[java]
+disabled = true
+
+# The `jobs` module shows the current number of jobs running.
+[jobs]
+disabled = true
+
+# The `julia` module shows the currently installed version of Julia.
+[julia]
+disabled = true
+
+# The `kotlin` module shows the currently installed version of Kotlin.
+[kotlin]
+disabled = true
+
+# The `kubernetes` module shows the current Kubernetes contextname and, if set, the namespace from the kubeconfig file.
+[kubernetes]
+disabled = true
+
+# The `line_break` module separates the prompt into two lines.
+# [line_break]
+# disabled = true
+
+# The `lua` module shows the currently installed version of Lua.
+[lua]
+disabled = true
+
+# The `memory_usage` module shows current system memory and swap usage.
+[memory_usage]
+disabled = true
+
+# The `hg_branch` module shows the active branch of the repo in your current directory.
+[hg_branch]
+disabled = true
+
+# The `nim` module shows the currently installed version of Nim.
+[nim]
+disabled = true
+
+# The `nix_shell` module shows the nix-shellenvironment. The module will be shown when inside a nix-shell environment.
+[nix_shell]
+disabled = true
+
+# The `nodejs` module shows the currently installed version of Node.js.
+[nodejs]
+disabled = true
+
+# The `ocaml` module shows the currently installed version of OCaml.
+[ocaml]
+disabled = true
+
+# The `openstack` module shows the current OpenStack cloud and project.
+[openstack]
+disabled = true
+
+# The `package` module is shown when the current directory is the repository for a package, and shows its current version.
+[package]
+disabled = true
+
+# The `perl` module shows the currently installed version of Perl.
+[perl]
+disabled = true
+
+# The `php` module shows the currently installed version of PHP.
+[php]
+disabled = true
+
+# The `purescript` module shows the currently installed version of PureScriptversion.
+[purescript]
+disabled = true
+
+# The `python` module shows the currently installed version of Pythonand the current Python virtual environmentif one is activated.
+[python]
+disabled = true
+
+# The `red` module shows the currently installed version of Red.
+[red]
+disabled = true
+
+# The `ruby` module shows the currently installed version of Ruby.
+[ruby]
+disabled = true
+
+# The `rust` module shows the currently installed version of Rust.
+[rust]
+disabled = true
+
+# The `scala` module shows the currently installed version of Scala.
+[scala]
+disabled = true
+
+# The `shell` module shows an indicator for currently used shell.
+[shell]
+disabled = true
+
+# The `shlvl` module shows the current SHLVL ("shell level") environment variable, if it is set to a number and meets or exceeds the specified threshold.
+[shlvl]
+disabled = true
+
+# The `singularity` module shows the current Singularityimage, if inside a container and $SINGULARITY_NAME is set.
+[singularity]
+disabled = true
+
+# The `status` module displays the exit code of the previous command.
+[status]
+disabled = true
+
+# The `swift` module shows the currently installed version of Swift.
+[swift]
+disabled = true
+
+# The `terraform` module shows the currently selected Terraform workspaceand version.
+[terraform]
+disabled = true
+
+# The `time` module shows the current local time.
+# [time]
+# disabled = true
+
+# The `username` module shows active user's username.
+# [username]
+# disabled = true
+
+# The `vagrant` module shows the currently installed version of Vagrant.
+[vagrant]
+disabled = true
+
+# The `vlang` module shows you your currently installed version of V.
+[vlang]
+disabled = true
+
+# The `vcsh` module displays the current active VCSHrepository.
+[vcsh]
+disabled = true
+
+# The `zig` module shows the currently installed version of Zig.
+[zig]
+disabled = true
+
+# The `custom` modules show the output of some arbitrary commands.
+[custom]
+disabled = true

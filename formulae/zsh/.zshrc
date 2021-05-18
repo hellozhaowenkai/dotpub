@@ -216,3 +216,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
   # eval "$(pyenv init -)"  # This may be slow.
   eval "$(pyenv init - --no-rehash)"  # This may be fast.
 fi
+
+## [starship](https://starship.rs/)
+# Add init scripts
+eval "$(starship init zsh)"
