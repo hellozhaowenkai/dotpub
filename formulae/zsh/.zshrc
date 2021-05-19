@@ -220,3 +220,9 @@ fi
 ## [starship](https://starship.rs/)
 # Add init scripts
 eval "$(starship init zsh)"
+
+## [neofetch](https://github.com/dylanaraps/neofetch/)
+# Show information when use iTerm
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  neofetch
+fi
