@@ -101,6 +101,7 @@ bindkey -M viins "^n" history-substring-search-down
 # =======================
 
 ## [History](http://zsh.sourceforge.net/Doc/Release/Options.html#History)
+
 # The name of the file in which command history is saved.
 export HISTFILE=~/.zsh_history
 # The maximum number of lines contained in the history file.
@@ -114,6 +115,14 @@ setopt HIST_ALLOW_CLOBBER
 setopt HIST_IGNORE_ALL_DUPS
 # Remove superfluous blanks from each command line being added to the history list.
 setopt HIST_REDUCE_BLANKS
+
+# Disable history when not use iTerm
+if [[ "$TERM_PROGRAM" != "iTerm.app" ]]; then
+  # Load old history from file
+  fc -RI
+  # Append new history to null
+  export HISTFILE=/dev/null
+fi
 
 
 # =======================
@@ -187,28 +196,67 @@ function npm-upgrade() {
 # Formulae Configuration
 # =======================
 
+## [neofetch](https://github.com/dylanaraps/neofetch/)
+
+# Show information when use iTerm
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+  neofetch
+fi
+
+
+## [powerlevel10k](https://github.com/romkatv/powerlevel10k/)
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n] confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Enable Powerlevel10k theme.
+source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+## [starship](https://starship.rs/)
+
+# Add init scripts
+# eval "$(starship init zsh)"
+
+
 ## [homebrew](https://brew.sh/)
-# Use tuna mirror
+
+# Use tuna mirror for index
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+# Use tuna mirror for bottles
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"
 
+
 ## [nvm](https://github.com/nvm-sh/nvm/)
+
 # Ensure that the NVM_DIR does not contain a trailing slash
 export NVM_DIR="$HOME/.nvm"
+
 # This loads nvm
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
 # This loads nvm bash_completion
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
+
 # Use taobao mirror
 export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
 
+
 ## [pyenv](https://github.com/pyenv/pyenv/)
-# Use taobao mirror
+
+# If set, does not append the SHA2 checksum of the file to the mirror URL.
 export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
+# Use taobao mirror
 export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python/"
+
 # Use tuna mirror for anaconda temporarily
-# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/"
 # Or you can download package then move it to `~/.pyenv/cache/` by yourself
+# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/"
 
 # Add pyenv init to your shell to enable shims and autocompletion.
 # Please make sure this is placed toward the end of the shell configuration file since it manipulates PATH during the initialization.
@@ -216,24 +264,3 @@ if command -v pyenv 1>/dev/null 2>&1; then
   # eval "$(pyenv init -)"  # This may be slow.
   eval "$(pyenv init - --no-rehash)"  # This may be fast.
 fi
-
-## [starship](https://starship.rs/)
-# Add init scripts
-# eval "$(starship init zsh)"
-
-## [neofetch](https://github.com/dylanaraps/neofetch/)
-# Show information when use iTerm
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
-  neofetch
-fi
-
-## [powerlevel10k](https://github.com/romkatv/powerlevel10k/)
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n] confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-# Enable Powerlevel10k theme.
-source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
