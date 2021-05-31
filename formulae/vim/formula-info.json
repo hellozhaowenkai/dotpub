@@ -1,5 +1,6 @@
 {
   "path": {
-    "*": ["~"]
+    ".*vimrc": ["~"],
+    "init.vim": ["~", ".config", "nvim"]
   }
 }

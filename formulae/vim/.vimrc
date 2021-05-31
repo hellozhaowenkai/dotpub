@@ -94,9 +94,7 @@ call plug#end()
 " Put your plugin configuration after this line.
 "
 
-" Enable true color.
-set termguicolors
-" Chose a color scheme to use.
+" Load color scheme.
 colorscheme gruvbox
 
 
@@ -108,48 +106,99 @@ colorscheme gruvbox
 " A (not so) minimal vimrc.
 "
 
-" You want Vim, not vi. When Vim finds a vimrc, `nocompatible` is set anyway.
+" You want Vim, not Vi. When Vim finds a vimrc, `nocompatible` is set anyway.
 " We set it explicitly to make our position clear!
 set nocompatible
 
-filetype plugin indent on          " Load plugins according to detected filetype.
-syntax on                          " Enable syntax highlighting.
+" Enable loading the plugin files and the indent file for specific file types.
+filetype plugin indent on
 
-set autoindent                     " Indent according to previous line.
-set expandtab                      " Use spaces instead of tabs.
-set softtabstop =4                 " Tab key indents by 4 spaces.
-set shiftwidth  =4                 " >> indents by 4 spaces.
-set shiftround                     " >> indents to next multiple of `shiftwidth`.
+syntax enable               " Enable syntax highlighting.
+set termguicolors           " Enable true color.
 
-set backspace   =indent,eol,start  " Make backspace work as you would expect.
-set hidden                         " Switch between buffers without having to save first.
-set laststatus  =2                 " Always show statusline.
-set display     =lastline          " Show as much as possible of the last line.
+set expandtab               " Use the appropriate number of spaces to insert a <Tab>.
+set smarttab                " A <Tab> in front of a line inserts blanks according to `shiftwidth`.
+set smartindent             " Do smart autoindenting when starting a new line.
+set autoindent              " Copy indent from current line when starting a new line.
+set copyindent              " Copy the structure of the existing lines indent when autoindenting a new line.
+set tabstop      =4         " Number of spaces that a <Tab> in the file counts for.
+set softtabstop  =4         " Number of spaces that a <Tab> counts for while performing editing operations.
+set shiftwidth   =4         " Number of spaces to use for each step of (auto)indent.
+set shiftround              " Round indent to multiple of `shiftwidth`.
 
-set showmode                       " Show current mode in command-line.
-set showcmd                        " Show already typed keys when more are expected.
+set showmode                " If in Insert, Replace or Visual mode put a message on the last line.
+set showcmd                 " Show (partial) command in the last line of the screen.
+set showmatch               " When a bracket is inserted, briefly jump to the matching one.
+set laststatus   =2         " Always show a status line.
+set display      =lastline  " As much as possible of the last line in a window will be displayed.
 
-set incsearch                      " Highlight while searching with `/` or `?`.
-set hlsearch                       " Keep matches highlighted.
+set incsearch               " While typing a search command, show where the pattern, as it was typed so far, matches.
+set hlsearch                " When there is a previous search pattern, highlight all its matches.
+set ignorecase              " Ignore case in search patterns.
+set smartcase               " Override the `ignorecase` option if the search pattern contains upper case characters.
 
-set ttyfast                        " Faster redrawing.
-set lazyredraw                     " Only redraw when necessary.
+set splitbelow              " Splitting a window will put the new window below the current one.
+set splitright              " Splitting a window will put the new window right of the current one.
 
-set splitbelow                     " Open new windows below the current window.
-set splitright                     " Open new windows right of the current window.
+set number                  " Print the line number in front of each line.
+set relativenumber          " Show the line number relative to the line with the cursor in front of each line.
+set cursorline              " Highlight the text line of the cursor.
 
-set cursorline                     " Find the current line quickly.
-set wrapscan                       " Searches wrap around end-of-file.
-set report      =0                 " Always report changed lines.
-set synmaxcol   =200               " Only highlight the first 200 columns.
+"
+" Make your Vim work as you would expect.
+"
 
-set list                           " Show non-printable characters.
+" When a file has been detected to have been changed outside of Vim, automatically read it again.
+set autoread
+" A buffer becomes hidden when it is abandoned.
+set hidden
+" Make your <BS> or <Del> key does do what you want.
+set backspace   =indent,eol,start
+" Enable the use of the mouse in all modes.
+set mouse       =a
+" Vim will use the system clipboard for all yank, delete, change and put operations.
+set clipboard  ^=unnamed,unnamedplus
+
+"
+" Make your Vim more smooth.
+"
+
+" Indicates a fast terminal connection.
+set ttyfast
+" The screen will not be redrawn while executing macros, registers and other commands that have not been typed.
+set lazyredraw
+" Maximum column in which to search for syntax items.
+set synmaxcol  =200
+" When the number of changed lines is more than `report` a message will be given for most commands.
+set report     =0
+
+"
+" Display non-printable characters visually.
+"
+
+" List mode, useful to see the difference between tabs and spaces and for trailing blanks.
+set list
+" Strings to use in List mode.
+let &listchars = 'trail:·,tab:»·,extends:→,precedes:←,nbsp:×'
+
+"
+" Wrap lines at convenient points.
+"
+
+" Lines longer than the width of the window will wrap and displaying continues on the next line.
+set wrap
+" Searches wrap around the end of the file.
+set wrapscan
+" Vim will wrap long lines at a character in `breakat` rather than at the last character that fits on the screen.
+set linebreak
+" Show `↪` at the beginning of wrapped lines.
+let &showbreak = '↪'
 
 "
 " Change cursor style dependent on mode.
 "
 
-" I like to use a block cursor in Normal mode, i-beam cursor in Insert mode, and underline cursor in Replace mode.
+" I like to use a block cursor in Normal mode, bar cursor in Insert mode, and underline cursor in Replace mode.
 if empty($TMUX)
   let &t_SI = "\<Esc>]50;CursorShape=1\x7"
   let &t_EI = "\<Esc>]50;CursorShape=0\x7"
@@ -186,7 +235,7 @@ function! s:PlugSetup() abort
 
   " Run `PlugInstall` if there are missing plugins.
   if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-    PlugInstall --sync | source $MYVIMRC
+    PlugInstall --sync | silent! source $MYVIMRC
   endif
 
   " Ensure all plugins are work right.
@@ -250,3 +299,5 @@ let g:mapleader = "\<Space>"
 
 " Make `Y` consistent with `C` and `D`.
 nnoremap Y y$
+" When in Insert mode, press `<Leader>p` to go to Paste mode.
+inoremap <Leader>p <C-O>:set invpaste<CR>

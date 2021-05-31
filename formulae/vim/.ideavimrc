@@ -1,0 +1,6 @@
+"
+" [ideavim](https://github.com/JetBrains/ideavim/)
+"
+
+" You can read your `~/.vimrc` file with this command:
+source ~/.vimrc
