@@ -17,12 +17,13 @@
 " Repository:
 "   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 " References:
-"   - [help](https://vimhelp.org/)
+"   - [Vim help files](https://vimhelp.org/)
 "   - [vim-galore](https://github.com/mhinz/vim-galore/)
-"   - [learn-vim](https://github.com/iggredible/Learn-Vim/)
+"   - [Learn Vim (the Smart Way)](https://github.com/iggredible/Learn-Vim/)
 "   - [vim-plug](https://github.com/junegunn/vim-plug/)
-"   - [vimrc](https://github.com/amix/vimrc/)
-"   - [dotf](https://github.com/areisrosa/dotf/)
+"   - [sensible.vim](https://github.com/tpope/vim-sensible/)
+"   - [The Ultimate vimrc](https://github.com/amix/vimrc/)
+"   - [(Dotf)iles](https://github.com/areisrosa/dotf/)
 " ==================================================
 
 
@@ -30,16 +31,19 @@
 " Setups
 " ==================================================
 
-" Get the defaults that most users want.
-source $VIMRUNTIME/defaults.vim
-
 " Check whether the current editor started with Neovim.
 let g:is_nvim = has('nvim')
 
+" Transitioning from Vim for Neovim.
+if g:is_nvim
+  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &packpath = &runtimepath
+endif
+
 " A helper function can improve the vim-plug conditional activation readability.
-function! g:Condition(plug_enable, ...)
-  let l:plug_options = get(a:000, 0, {})
-  return a:plug_enable ? l:plug_options : extend(l:plug_options, { 'on': [], 'for': [] })
+function! g:Condition(is_enabled, ...)
+  let l:options = get(a:000, 0, {})
+  return a:is_enabled ? l:options : extend(l:options, { 'on': [], 'for': [] })
 endfunction
 
 
@@ -48,7 +52,14 @@ endfunction
 " ==================================================
 
 "
-" Let vim-plug manage plugins.
+" Load optional plugins from packages.
+"
+
+" Extended `%` matching for HTML, LaTeX, and many other languages.
+packadd! matchit
+
+"
+" Load more plugins from network by vim-plug.
 "
 
 " ------------------------------------+-------------------------------------------------------------------
@@ -64,24 +75,18 @@ endfunction
 " ------------------------------------+-------------------------------------------------------------------
 
 " Plugins will be downloaded under the specified directory.
-call plug#begin(g:is_nvim ? stdpath('data') . '/plugged' : '~/.vim/plugged')
+call plug#begin('~/.vim/plugged')
 
 "
 " Declare the list of plugins.
 "
 
-" If you need Vim help for vim-plug itself (e.g. :help plug-options), register vim-plug as a plugin.
-Plug 'junegunn/vim-plug'
-" Retro groove color scheme for Vim.
-Plug 'morhetz/gruvbox'
-" A simplified and optimized Gruvbox colorscheme for Vim.
-Plug 'lifepillar/vim-gruvbox8'
+" Monokai Pro color scheme for Vim / Neovim.
+Plug 'phanviet/vim-monokai-pro'
+" A light and configurable statusline / tabline plugin for Vim.
+Plug 'itchyny/lightline.vim'
 " A solid language pack for Vim.
 Plug 'sheerun/vim-polyglot'
-" Defaults everyone can agree on.
-Plug 'tpope/vim-sensible'
-" Heuristically set buffer options.
-Plug 'tpope/vim-sleuth'
 " A Git wrapper so awesome, it should be illegal.
 Plug 'tpope/vim-fugitive', g:Condition(g:is_nvim)
 " Make your Vim / Neovim as smart as VSCode.
@@ -95,7 +100,9 @@ call plug#end()
 "
 
 " Load color scheme.
-colorscheme gruvbox
+colorscheme monokai_pro
+" The lightline.vim configuration.
+let g:lightline = { 'colorscheme': 'monokai_pro' }
 
 
 " ==================================================
@@ -129,17 +136,20 @@ set shiftround              " Round indent to multiple of `shiftwidth`.
 set showmode                " If in Insert, Replace or Visual mode put a message on the last line.
 set showcmd                 " Show (partial) command in the last line of the screen.
 set showmatch               " When a bracket is inserted, briefly jump to the matching one.
+set scrolloff    =1         " Minimal number of screen lines to keep above and below the cursor.
 set laststatus   =2         " Always show a status line.
-set display      =lastline  " As much as possible of the last line in a window will be displayed.
+set display     +=lastline  " As much as possible of the last line in a window will be displayed.
 
 set incsearch               " While typing a search command, show where the pattern, as it was typed so far, matches.
 set hlsearch                " When there is a previous search pattern, highlight all its matches.
 set ignorecase              " Ignore case in search patterns.
 set smartcase               " Override the `ignorecase` option if the search pattern contains upper case characters.
 
+set hidden                  " A buffer becomes hidden when it is abandoned.
 set splitbelow              " Splitting a window will put the new window below the current one.
 set splitright              " Splitting a window will put the new window right of the current one.
 
+set ruler                   " Show the line and column number of the cursor position, separated by a comma.
 set number                  " Print the line number in front of each line.
 set relativenumber          " Show the line number relative to the line with the cursor in front of each line.
 set cursorline              " Highlight the text line of the cursor.
@@ -150,27 +160,76 @@ set cursorline              " Highlight the text line of the cursor.
 
 " When a file has been detected to have been changed outside of Vim, automatically read it again.
 set autoread
-" A buffer becomes hidden when it is abandoned.
-set hidden
+" Set the character encoding used inside Vim.
+set encoding        =utf-8
+" The bell will not be rung anyway.
+set belloff         =all
 " Make your <BS> or <Del> key does do what you want.
-set backspace   =indent,eol,start
+set backspace       =indent,eol,start
 " Enable the use of the mouse in all modes.
-set mouse       =a
+set mouse           =a
 " Vim will use the system clipboard for all yank, delete, change and put operations.
-set clipboard  ^=unnamed,unnamedplus
+set clipboard      ^=unnamed,unnamedplus
+" All folds are open when starting.
+set nofoldenable
+" Keep the cursor in the same column (if possible) when scrolling.
+set nostartofline
+" Numbers that start with a zero will not be considered to be octal when used as a [count].
+set nrformats      -=octal
+" Where it makes sense, remove a comment leader when joining lines.
+set formatoptions  +=j
 
 "
 " Make your Vim more smooth.
 "
 
-" Indicates a fast terminal connection.
+" Indicate a fast terminal connection.
 set ttyfast
 " The screen will not be redrawn while executing macros, registers and other commands that have not been typed.
 set lazyredraw
-" Maximum column in which to search for syntax items.
-set synmaxcol  =200
-" When the number of changed lines is more than `report` a message will be given for most commands.
-set report     =0
+" Time out when part of a keyboard code has been received.
+set ttimeout
+" The time in milliseconds that is waited for a keyboard code sequence to complete.
+set ttimeoutlen  =100
+
+"
+" Wrap lines at convenient points.
+"
+
+" Lines longer than the width of the window will wrap and displaying continues on the next line.
+set wrap
+" Vim will wrap long lines at a character in `breakat` rather than at the last character that fits on the screen.
+set linebreak
+" Every wrapped line will continue visually indented, thus preserving horizontal blocks of text.
+set breakindent
+" Display the `showbreak` value before applying the additional indent.
+set breakindentopt  =sbr
+" Show `↪` at the beginning of wrapped lines.
+let &showbreak = '↪'
+
+"
+" Better experience when completing.
+"
+
+" The command-line completion operates in an enhanced mode.
+set wildmenu
+" Don't scan current and included files when completion is active.
+set complete     -=i
+" When using <C-D> to list matching tags, the kind of tag and the file of the tag is listed.
+set wildoptions  +=tagfile
+" Search upward for tags files in a directory tree.
+setglobal tags-=./tags tags-=./tags; tags^=./tags;
+
+"
+" Snapshot enables you to continue where you left off.
+"
+
+" Remember global variables that start with an uppercase letter, and don't contain a lowercase letter.
+set viminfo         ^=!
+" Don't remember options and mappings local to a window or buffer (not global values for local options).
+set viewoptions     -=options
+" Don't remember all options and mappings (also global values for local options).
+set sessionoptions  -=options
 
 "
 " Display non-printable characters visually.
@@ -180,19 +239,8 @@ set report     =0
 set list
 " Strings to use in List mode.
 let &listchars = 'trail:·,tab:»·,extends:→,precedes:←,nbsp:×'
-
-"
-" Wrap lines at convenient points.
-"
-
-" Lines longer than the width of the window will wrap and displaying continues on the next line.
-set wrap
-" Searches wrap around the end of the file.
-set wrapscan
-" Vim will wrap long lines at a character in `breakat` rather than at the last character that fits on the screen.
-set linebreak
-" Show `↪` at the beginning of wrapped lines.
-let &showbreak = '↪'
+" Characters to fill the statuslines and vertical separators.
+let &fillchars = 'stl: ,stlnc: ,vert:│,fold:·,foldsep:│'
 
 "
 " Change cursor style dependent on mode.
@@ -216,19 +264,19 @@ endif
 
 " Hi.
 function! s:Hi(name)
-  let l:message = 'Hello!  My name is '
+  let l:message = 'Hi!  This is '
   return l:message . a:name . '.'
 endfunction
 
 " Automatic vim-plug installation.
 function! s:PlugSetup() abort
-  echomsg 'Plug Setup start...'
+  echomsg 'Plug setup: start...'
 
-  " Install vim-plug if not found, else run `PlugUpgrade` to upgrade it.
-  let l:plug_dir = (g:is_nvim ? stdpath('data') . '/site' : '~/.vim') . '/autoload/plug.vim'
-  if empty(glob(l:plug_dir))
+  " Install vim-plug if not found, else upgrade it.
+  let l:plug_path = '~/.vim/autoload/plug.vim'
+  if empty(glob(l:plug_path))
     let l:plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    silent execute '!curl -fLo ' . l:plug_dir . ' --create-dirs ' . l:plug_url
+    silent execute '!curl -fLo ' . l:plug_path . ' --create-dirs ' . l:plug_url
   else
     PlugUpgrade
   endif
@@ -241,16 +289,16 @@ function! s:PlugSetup() abort
   " Ensure all plugins are work right.
   PlugClean | PlugUpdate --sync | PlugStatus
 
-  echomsg 'Plug Setup end.'
+  echomsg 'Plug setup: end.'
 endfunction
 
 " KeVim's initial flow setup actions.
 function! s:KeVimSetup() abort
   echomsg s:Hi('KevInZhao')
 
-  echomsg 'KeVim Setup start...'
+  echomsg 'KeVim setup: start...'
   call s:PlugSetup()
-  echomsg 'KeVim Setup end.'
+  echomsg 'KeVim setup: end.'
 endfunction
 
 
@@ -258,11 +306,20 @@ endfunction
 " Commands
 " ==================================================
 
-" Setup KeVim.
+" Execute KeVim's initial flow setup actions.
 command! KeVimSetup call s:KeVimSetup()
 
-" Use `:W` to write a file as sudo.
+" Write a file as sudo.
 command! W execute 'w !sudo tee % > /dev/null' <Bar> edit!
+
+" See the difference between the current buffer and the file it was loaded from, thus the changes you made.
+command! Diff vertical new | set buftype=nofile | read ++edit # | 0delete_ | diffthis | wincmd p | diffthis
+
+" When editing a file, always jump to the last known cursor position.
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'commit'
+  \ |   execute "normal! g'\""
+  \ | endif
 
 
 " ==================================================
@@ -297,7 +354,15 @@ let g:mapleader = "\<Space>"
 " Using `noremap` is preferred, because it's clearer that recursive mapping is (mostly) disabled.
 "
 
+" Toggle the Paste mode.
+set pastetoggle  =<Leader>p
+" Don't use Ex mode, use `Q` for formatting.
+noremap Q gq
 " Make `Y` consistent with `C` and `D`.
 nnoremap Y y$
-" When in Insert mode, press `<Leader>p` to go to Paste mode.
-inoremap <Leader>p <C-O>:set invpaste<CR>
+" Clear the highlighting of search and diff.
+nnoremap <silent> <Leader>l :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+" Delete the word before the cursor, with undo support.
+inoremap <Leader>w <C-G>u<C-W>
+" Delete all entered characters before the cursor in the current line, with undo support.
+inoremap <Leader>u <C-G>u<C-U>
