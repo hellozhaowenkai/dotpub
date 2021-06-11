@@ -34,16 +34,21 @@
 " Check whether the current editor started with Neovim.
 let g:is_nvim = has('nvim')
 
-" Transitioning from Vim for Neovim.
 if g:is_nvim
+  " Transitioning from Vim for Neovim.
   set runtimepath^=~/.vim runtimepath+=~/.vim/after
   let &packpath = &runtimepath
+
+  " Integrating with Node.
+  let g:node_host_prog = '~/.nvm/versions/node/v14.17.0/bin/node'
+  " Integrating with Python.
+  let g:python3_host_prog = '~/.pyenv/versions/neovim/bin/python'
 endif
 
 " A helper function can improve the vim-plug conditional activation readability.
 function! g:Condition(is_enabled, ...)
   let l:options = get(a:000, 0, {})
-  return a:is_enabled ? l:options : extend(l:options, { 'on': [], 'for': [] })
+  return a:is_enabled ? l:options : extend(l:options, {'on': [], 'for': []})
 endfunction
 
 
@@ -81,28 +86,71 @@ call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 "
 
-" Monokai Pro color scheme for Vim / Neovim.
-Plug 'phanviet/vim-monokai-pro'
-" A light and configurable statusline / tabline plugin for Vim.
-Plug 'itchyny/lightline.vim'
-" A solid language pack for Vim.
+" Retro groove color scheme for Vim.
+Plug 'morhetz/gruvbox'
+
+" A collection of language packs for Vim.
 Plug 'sheerun/vim-polyglot'
+" Two things you need to know:
+"   - Vim Polyglot sets defaults of some settings that are relevant for good language support (just like vim-sensible).
+"   - Vim Polyglot tries to automatically detect indentation settings (just like vim-sleuth).
+" You can disable them by:
+let g:polyglot_disabled = ['sensible', 'autoindent']
+
 " A Git wrapper so awesome, it should be illegal.
-Plug 'tpope/vim-fugitive', g:Condition(g:is_nvim)
+Plug 'tpope/vim-fugitive'
+" Heuristically set buffer options.
+Plug 'tpope/vim-sleuth'
+" Quoting / Parenthesizing made simple.
+Plug 'tpope/vim-surround'
+" Comment stuff out.
+Plug 'tpope/vim-commentary'
+" Combine with netrw to create a delicious salad dressing.
+Plug 'tpope/vim-vinegar'
+" Enable repeating supported plugin maps with `.`.
+Plug 'tpope/vim-repeat'
+
 " Make your Vim / Neovim as smart as VSCode.
-Plug 'neoclide/coc.nvim', g:Condition(g:is_nvim, { 'branch': 'release' })
+Plug 'neoclide/coc.nvim', g:Condition(g:is_nvim, {'branch': 'release'})
+" Path to node executable to start coc service.
+let g:coc_node_path = g:is_nvim ? g:node_host_prog : 'node'
+" Global extension names to install when they aren't installed.
+let g:coc_global_extensions = [
+  "\ Enable language servers.
+  \ 'coc-json', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-vetur', 'coc-jedi',
+  "\ Improve Vim experience.
+  \ 'coc-lists', 'coc-snippets', 'coc-git', 'coc-yank',
+\ ]
 
-" List ends here. Plugins become visible to Vim after this call.
+" Asynchronous Lint Engine.
+Plug 'dense-analysis/ale', g:Condition(g:is_nvim)
+" Integrating with coc.nvim.
+let g:ale_disable_lsp = 1
+" Fix files when they are saved.
+let g:ale_fix_on_save = 1
+" A mapping from filetypes to `List` values for functions for fixing errors.
+let g:ale_fixers = {'python': ['black'], '*': ['prettier']}
+
+" Lean & Mean status / tabline for Vim that's light as air.
+Plug 'vim-airline/vim-airline'
+" Integrating with powerline fonts.
+let g:airline_powerline_fonts = 1
+" Integrating with ALE for displaying error information in the status bar.
+let g:airline#extensions#ale#enabled = 1
+" Smarter tab line.
+let g:airline#extensions#tabline#enabled = 1
+
+" A Vim plugin to display the indention levels with thin vertical lines.
+Plug 'Yggdroot/indentLine'
+" Change indent char.
+let g:indentLine_char = '▏'
+
+"
+" List ends here.
+"
+
+" Plugins become visible to Vim after this call.
 call plug#end()
-
-"
-" Put your plugin configuration after this line.
-"
-
-" Load color scheme.
-colorscheme monokai_pro
-" The lightline.vim configuration.
-let g:lightline = { 'colorscheme': 'monokai_pro' }
 
 
 " ==================================================
@@ -120,8 +168,9 @@ set nocompatible
 " Enable loading the plugin files and the indent file for specific file types.
 filetype plugin indent on
 
-syntax enable               " Enable syntax highlighting.
 set termguicolors           " Enable true color.
+colorscheme gruvbox         " Load color scheme.
+syntax enable               " Enable syntax highlighting.
 
 set expandtab               " Use the appropriate number of spaces to insert a <Tab>.
 set smarttab                " A <Tab> in front of a line inserts blanks according to `shiftwidth`.
@@ -130,7 +179,6 @@ set autoindent              " Copy indent from current line when starting a new 
 set copyindent              " Copy the structure of the existing lines indent when autoindenting a new line.
 set tabstop      =4         " Number of spaces that a <Tab> in the file counts for.
 set softtabstop  =4         " Number of spaces that a <Tab> counts for while performing editing operations.
-set shiftwidth   =4         " Number of spaces to use for each step of (auto)indent.
 set shiftround              " Round indent to multiple of `shiftwidth`.
 
 set showmode                " If in Insert, Replace or Visual mode put a message on the last line.
@@ -191,6 +239,8 @@ set lazyredraw
 set ttimeout
 " The time in milliseconds that is waited for a keyboard code sequence to complete.
 set ttimeoutlen  =100
+" If this many milliseconds nothing is typed the swap file will be written to disk.
+set updatetime   =300
 
 "
 " Wrap lines at convenient points.
@@ -301,6 +351,14 @@ function! s:KeVimSetup() abort
   echomsg 'KeVim setup: end.'
 endfunction
 
+" Replace in the entire file, with ask for confirmation.
+function! s:replace(pattern, string) abort
+  " The full `substitute` syntax is as follows:
+  "   :[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
+  " For each line in [range] replace a match of {pattern} with {string}.
+  execute '%substitute/' . a:pattern . '/' . a:string . '/gc'
+endfunction
+
 
 " ==================================================
 " Commands
@@ -310,10 +368,16 @@ endfunction
 command! KeVimSetup call s:KeVimSetup()
 
 " Write a file as sudo.
-command! W execute 'w !sudo tee % > /dev/null' <Bar> edit!
+command! W execute 'write !sudo tee % > /dev/null' <Bar> edit!
+
+" Quit without writing, also when the current buffer has changes.
+command! Q quit!
+
+" Replace in the entire file, with ask for confirmation.
+command! -nargs=+ Replace call s:replace(<f-args>)
 
 " See the difference between the current buffer and the file it was loaded from, thus the changes you made.
-command! Diff vertical new | set buftype=nofile | read ++edit # | 0delete_ | diffthis | wincmd p | diffthis
+command! Diff vertical new | set buftype=nofile | read ++edit # | 0delete _ | diffthis | wincmd p | diffthis
 
 " When editing a file, always jump to the last known cursor position.
 autocmd BufReadPost *
@@ -354,15 +418,36 @@ let g:mapleader = "\<Space>"
 " Using `noremap` is preferred, because it's clearer that recursive mapping is (mostly) disabled.
 "
 
-" Toggle the Paste mode.
-set pastetoggle  =<Leader>p
 " Don't use Ex mode, use `Q` for formatting.
 noremap Q gq
 " Make `Y` consistent with `C` and `D`.
 nnoremap Y y$
 " Clear the highlighting of search and diff.
 nnoremap <silent> <Leader>l :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
+
 " Delete the word before the cursor, with undo support.
 inoremap <Leader>w <C-G>u<C-W>
 " Delete all entered characters before the cursor in the current line, with undo support.
 inoremap <Leader>u <C-G>u<C-U>
+
+" Toggle the Paste mode.
+set pastetoggle  =<Leader>p
+" Delete, and without influence to the system clipboard.
+vnoremap <Leader>d "_d
+" Cut to the system clipboard.
+vnoremap <Leader>x "+d
+" Copy to the system clipboard.
+vnoremap <Leader>c "+y
+" Paste form the system clipboard, and don't auto-indent.
+nnoremap <Leader>v <Leader>p"+p<Leader>p
+lnoremap <Leader>v <C-R><C-O>+
+
+" Find the word under the cursor in the entire file.
+nnoremap <Leader>f :/<C-r><C-w><CR>Gn
+" Replace the word under the cursor in the entire file, with ask for confirmation.
+nnoremap <Leader>r :Replace<Space><C-r><C-w><Space>
+
+" Open a new tab page with an netrw window, after the current tab page.
+nnoremap <Leader>t :tabnew<Space>.<CR>
+" Close the current tab page.
+nnoremap <Leader>w :tabclose<CR>
