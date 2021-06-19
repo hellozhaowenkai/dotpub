@@ -31,12 +31,27 @@
 " Setups
 " ==================================================
 
+" This variable is used to locate various user files for Vim.
+let g:vim_path = expand('~/.vim/')
+
+" Make the path absolute.
+function! g:Path(relative_path)
+  let l:absolute_path = g:vim_path . a:relative_path
+
+  " Create directory if needed.
+  if matchend(a:relative_path, '/') > 1 && !isdirectory(l:absolute_path) && exists('*mkdir')
+    call mkdir(l:absolute_path, 'p')
+  endif
+
+  return l:absolute_path
+endfunction
+
 " Check whether the current editor started with Neovim.
 let g:is_nvim = has('nvim')
 
 if g:is_nvim
   " Transitioning from Vim for Neovim.
-  set runtimepath^=~/.vim runtimepath+=~/.vim/after
+  let &runtimepath = g:Path('') . ',' . &runtimepath . ',' . g:Path('after/')
   let &packpath = &runtimepath
 
   " Integrating with Node.
@@ -80,7 +95,7 @@ packadd! matchit
 " ------------------------------------+-------------------------------------------------------------------
 
 " Plugins will be downloaded under the specified directory.
-call plug#begin('~/.vim/plugged')
+call plug#begin(g:Path('plugged/'))
 
 "
 " Declare the list of plugins.
@@ -282,6 +297,28 @@ set viewoptions     -=options
 set sessionoptions  -=options
 
 "
+" Temporary files.
+"
+
+" Temporary directory.
+let s:temporary_path = 'temps/'
+
+" Make a backup before overwriting a file.
+set backup
+" The directory where the backup file is stored.
+let &backupdir = g:Path(s:temporary_path . 'backup//')
+
+" Use a swap file for the buffer.
+set swapfile
+" The directory where the swap file is stored.
+let &directory = g:Path(s:temporary_path . 'swap//')
+
+" Vim automatically saves undo history to an undo file, and restores undo history from the same file.
+set undofile
+" The directory where the undo file is stored.
+let &undodir = g:Path(s:temporary_path . 'undo//')
+
+"
 " Display non-printable characters visually.
 "
 
@@ -323,7 +360,7 @@ function! s:PlugSetup() abort
   echomsg 'Plug setup: start...'
 
   " Install vim-plug if not found, else upgrade it.
-  let l:plug_path = '~/.vim/autoload/plug.vim'
+  let l:plug_path = g:Path('autoload/plug.vim')
   if empty(glob(l:plug_path))
     let l:plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     silent execute '!curl -fLo ' . l:plug_path . ' --create-dirs ' . l:plug_url
