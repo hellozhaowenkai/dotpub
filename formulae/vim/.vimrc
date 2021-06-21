@@ -53,12 +53,12 @@ if g:is_nvim
   " Transitioning from Vim for Neovim.
   let &runtimepath = g:Path('') . ',' . &runtimepath . ',' . g:Path('after/')
   let &packpath = &runtimepath
-
-  " Integrating with Node.
-  let g:node_host_prog = '~/.nvm/versions/node/v14.17.0/bin/node'
-  " Integrating with Python.
-  let g:python3_host_prog = '~/.pyenv/versions/neovim/bin/python'
 endif
+
+" Integrating with Node.
+let g:node_host_prog = '~/.nvm/versions/node/neovim/bin/node'
+" Integrating with Python.
+let g:python3_host_prog = '~/.pyenv/versions/neovim/bin/python'
 
 " A helper function can improve the vim-plug conditional activation readability.
 function! g:Condition(is_enabled, ...)
@@ -103,6 +103,8 @@ call plug#begin(g:Path('plugged/'))
 
 " Retro groove color scheme for Vim.
 Plug 'morhetz/gruvbox'
+" Enables italic text.
+let g:gruvbox_italic = 1
 
 " A collection of language packs for Vim.
 Plug 'sheerun/vim-polyglot'
@@ -128,13 +130,13 @@ Plug 'tpope/vim-repeat'
 " Make your Vim / Neovim as smart as VSCode.
 Plug 'neoclide/coc.nvim', g:Condition(g:is_nvim, {'branch': 'release'})
 " Path to node executable to start coc service.
-let g:coc_node_path = g:is_nvim ? g:node_host_prog : 'node'
+let g:coc_node_path = g:node_host_prog
 " Global extension names to install when they aren't installed.
 let g:coc_global_extensions = [
   "\ Enable language servers.
-  \ 'coc-json', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-vetur', 'coc-jedi',
+  \ 'coc-vimlsp', 'coc-html', 'coc-css', 'coc-tsserver', 'coc-vetur', 'coc-jedi',
   "\ Improve Vim experience.
-  \ 'coc-lists', 'coc-snippets', 'coc-git', 'coc-yank',
+  \ 'coc-lists', 'coc-snippets', 'coc-git', 'coc-yank', 'coc-pairs', 'coc-highlight',
 \ ]
 
 " Asynchronous Lint Engine.
@@ -186,6 +188,7 @@ filetype plugin indent on
 set termguicolors           " Enable true color.
 colorscheme gruvbox         " Load color scheme.
 syntax enable               " Enable syntax highlighting.
+set background   =dark      " Vim will try to use colors that look good on a dark background.
 
 set expandtab               " Use the appropriate number of spaces to insert a <Tab>.
 set smarttab                " A <Tab> in front of a line inserts blanks according to `shiftwidth`.
@@ -241,6 +244,8 @@ set nostartofline
 set nrformats      -=octal
 " Where it makes sense, remove a comment leader when joining lines.
 set formatoptions  +=j
+" Don't give `ins-completion-menu` messages.
+set shortmess      +=c
 
 "
 " Make your Vim more smooth.
@@ -389,7 +394,7 @@ function! s:KeVimSetup() abort
 endfunction
 
 " Replace in the entire file, with ask for confirmation.
-function! s:replace(pattern, string) abort
+function! s:Replace(pattern, string) abort
   " The full `substitute` syntax is as follows:
   "   :[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
   " For each line in [range] replace a match of {pattern} with {string}.
@@ -411,10 +416,10 @@ command! W execute 'write !sudo tee % > /dev/null' <Bar> edit!
 command! Q quit!
 
 " Replace in the entire file, with ask for confirmation.
-command! -nargs=+ Replace call s:replace(<f-args>)
+command! -nargs=+ Replace call s:Replace(<f-args>)
 
 " See the difference between the current buffer and the file it was loaded from, thus the changes you made.
-command! Diff vertical new | set buftype=nofile | read ++edit # | 0delete _ | diffthis | wincmd p | diffthis
+command! Compare vertical new | set buftype=nofile | read ++edit # | 0delete _ | diffthis | wincmd p | diffthis
 
 " When editing a file, always jump to the last known cursor position.
 autocmd BufReadPost *
@@ -422,6 +427,10 @@ autocmd BufReadPost *
   \ |   execute "normal! g'\""
   \ | endif
 
+if g:is_nvim
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+endif
 
 " ==================================================
 " Mappings
@@ -455,6 +464,9 @@ let g:mapleader = "\<Space>"
 " Using `noremap` is preferred, because it's clearer that recursive mapping is (mostly) disabled.
 "
 
+" Hi.
+nnoremap <Leader>h :echomsg <SID>Hi('KevInZhao')<CR>
+
 " Don't use Ex mode, use `Q` for formatting.
 noremap Q gq
 " Make `Y` consistent with `C` and `D`.
@@ -480,11 +492,30 @@ nnoremap <Leader>v <Leader>p"+p<Leader>p
 lnoremap <Leader>v <C-R><C-O>+
 
 " Find the word under the cursor in the entire file.
-nnoremap <Leader>f :/<C-r><C-w><CR>Gn
+nnoremap <Leader>f :/<C-R><C-W><CR>Gn
 " Replace the word under the cursor in the entire file, with ask for confirmation.
-nnoremap <Leader>r :Replace<Space><C-r><C-w><Space>
+nnoremap <Leader>r :Replace<Space><C-R><C-W><Space>
 
 " Open a new tab page with an netrw window, after the current tab page.
 nnoremap <Leader>t :tabnew<Space>.<CR>
 " Close the current tab page.
 nnoremap <Leader>w :tabclose<CR>
+
+" Go to next buffer in buffer list.
+nnoremap <Leader>bn :bnext<CR>
+" Unload current buffer and delete it from the buffer list.
+nnoremap <Leader>bd :bdelete<CR>
+
+if g:is_nvim
+  " Trigger completion.
+  inoremap <silent><expr> <Leader><Tab> coc#refresh()
+  " GoTo code navigation.
+  nmap <silent> <Leader>gr <Plug>(coc-references)
+  " Symbol renaming.
+  nmap <Leader>rn <Plug>(coc-rename)
+
+  " Show common lists.
+  nnoremap <silent><nowait> <Leader>cl :<C-U>CocList<CR>
+  " Grep word under cursor with interactive mode.
+  nnoremap <silent> <Leader>cg :execute 'CocList -I --input=' . expand('<cword>') . ' grep'<CR>
+endif
