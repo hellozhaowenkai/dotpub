@@ -1,5 +1,6 @@
 {
   "path": {
-    "*": ["~"]
+    ".z*": ["~"],
+    "my-patches.zsh": ["~", ".oh-my-zsh", "custom"]
   }
 }

@@ -1,6 +1,29 @@
-# =======================
+# ==================================================
+# `.zshrc' is sourced in interactive shells.
+#
+# Maintainer:
+#   KevInZhao <hellozhaowenkai@gmail.com>
+# Description:
+#   Personal preference .zshrc file.
+# Note:
+#   It should contain commands to set up aliases, functions, options, key bindings, etc.
+# Sections:
+#   - Oh-My-Zsh Configuration
+#   - Plugins Configuration
+#   - Zsh Configuration
+#   - Custom Configuration
+#   - Formulae Configuration
+# Repository:
+#   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
+# References:
+#   - [What to put in your startup files](https://zsh.sourceforge.io/Guide/zshguide02.html)
+#   - [template](~/.oh-my-zsh/templates/zshrc.zsh-template)
+# ==================================================
+
+
+# ==================================================
 # Oh-My-Zsh Configuration
-# =======================
+# ==================================================
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -77,30 +100,60 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(
   # git
   vi-mode
+  colored-man-pages
 )
 
+# Enable Oh-My-Zsh.
 source $ZSH/oh-my-zsh.sh
 
 
-# =======================
+# ==================================================
 # Plugins Configuration
-# =======================
+# ==================================================
 
-# Load plugins installed by brew
+# Load plugins installed by Homebrew.
 source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# Allow ctrl-p/ctrl-n for navigate history integrated with zsh-history-substring-search
+# Allow Ctrl-P/Ctrl-N for navigate history integrated with zsh-history-substring-search.
 bindkey -M viins "^p" history-substring-search-up
 bindkey -M viins "^n" history-substring-search-down
 
+# Allow Ctrl-]/Ctrl-[ for partially accept the suggestion up to the point that the cursor moves to.
+bindkey -M viins "^]" forward-word
+bindkey -M viins "^[" backward-kill-word
 
-# =======================
+# Make the switch between modes quicker when using vi-mode.
+export KEYTIMEOUT=1
+
+# ==================================================
 # Zsh Configuration
-# =======================
+# ==================================================
 
-## [History](http://zsh.sourceforge.net/Doc/Release/Options.html#History)
+#
+# [Options](http://zsh.sourceforge.net/Doc/Release/Options.html)
+#
+
+# `setopt` shows all options whose settings are changed from the default.
+
+#
+# Changing Directories.
+#
+
+# Don't push multiple copies of the same directory onto the directory stack.
+setopt PUSHD_IGNORE_DUPS
+
+#
+# Completion.
+#
+
+# On an ambiguous completion, instead of listing possibilities or beeping, insert the first match immediately.
+setopt MENU_COMPLETE
+
+#
+# History.
+#
 
 # The name of the file in which command history is saved.
 export HISTFILE=~/.zsh_history
@@ -111,106 +164,74 @@ export HISTSIZE=500
 
 # Add `|` to output redirections in the history.
 setopt HIST_ALLOW_CLOBBER
-# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+# If a new command line being added to the history list duplicates an older one,
+# the older command is removed from the list (even if it is not the previous event).
 setopt HIST_IGNORE_ALL_DUPS
 # Remove superfluous blanks from each command line being added to the history list.
 setopt HIST_REDUCE_BLANKS
+# Remove command lines from the history list when the first character on the line is a space,
+# or when one of the expanded aliases contains a leading space.
+setopt HIST_IGNORE_SPACE
 
-# Disable history when not use iTerm
+# Disable history when not use iTerm.
 if [[ "$TERM_PROGRAM" != "iTerm.app" ]]; then
-  # Do read old history from file
+  # Do read old history from file.
   fc -RI
-  # Do not write new history to file
+  # Do not write new history to file.
   unset HISTORY HISTFILE HISTSAVE HISTZONE HISTORY HISTLOG
-  # export HISTFILE=/dev/null  # zsh: locking failed for /dev/null: permission denied
-  # export HISTSIZE=0
-  # export HISTFILESIZE=0
 fi
 
 
-# =======================
-# User Configuration
-# =======================
+# ==================================================
+# Custom Configuration
+# ==================================================
 
+# If `MANPATH` is set, `man` uses it as the path to search for manual page files.
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# You may need to manually set your language environment
+# You may need to manually set your language environment.
 export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
+# Preferred editor for local and remote sessions.
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR="vim"
 else
-  export EDITOR="code"
+  export EDITOR="nvim"
 fi
 
-# Compilation flags
+# Compilation flags.
 # export ARCHFLAGS="-arch x86_64"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# users are encouraged to define aliases within the `$ZSH_CUSTOM` folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
+# Example aliases:
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias cnpm="npm --registry=https://registry.npm.taobao.org \
-  --cache=$HOME/.npm/.cache/cnpm \
-  --disturl=https://npm.taobao.org/mirrors/node \
-  --userconfig=$HOME/.cnpmrc"
 
-function shared() {
-  if [[ "$2" == "pull" ]] {
-    scp -r $1:~/Public/Shared/* ~/Public/Shared/
-  }
-  if [[ "$2" == "push" ]] {
-    scp -r ~/Public/Shared/* $1:~/Public/Shared/
-  }
-}
-
-function git-push() {
-  if (($+1)) {
-    git push origin HEAD:$1
-  } else {
-    local now=$(date "+%Y%m%d-%H%M%S")
-    git push origin HEAD:$now
-  }
-}
-function git-pull() {
-  git pull --rebase origin $1:
-}
-function git-fetch() {
-  local now=$(date "+%Y%m%d-%H%M%S")
-  git remote prune origin && git fetch --depth=1 origin $1:$now && git checkout $now
-}
-
-alias npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
-function npm-upgrade() {
-  for package (`update-npm`) {
-    echo $package
-    npm -g install $package
-  }
-}
-
-
-# =======================
+# ==================================================
 # Formulae Configuration
-# =======================
+# ==================================================
 
-## [neofetch](https://github.com/dylanaraps/neofetch/)
+#
+# [neofetch](https://github.com/dylanaraps/neofetch/)
+#
 
-# Show information when use iTerm
+# Show information when use iTerm.
 if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
   neofetch
 fi
 
-
-## [powerlevel10k](https://github.com/romkatv/powerlevel10k/)
+#
+# [powerlevel10k](https://github.com/romkatv/powerlevel10k/)
+#
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n] confirmations, etc.) must go above this block; everything else may go below.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -218,53 +239,70 @@ fi
 # Enable Powerlevel10k theme.
 source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# To customize prompt, run `p10k configure` or edit `~/.p10k.zsh`.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+#
+# [starship](https://starship.rs/)
+#
 
-## [starship](https://starship.rs/)
-
-# Add init scripts
+# Add init scripts.
 # eval "$(starship init zsh)"
 
+#
+# [fzf](https://github.com/junegunn/fzf/)
+#
 
-## [homebrew](https://brew.sh/)
+# Enable fuzzy auto-completion.
+[[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
 
-# Use tuna mirror
+# Enable key bindings.
+source "/usr/local/opt/fzf/shell/key-bindings.zsh"
+
+#
+# [zoxide](https://github.com/ajeetdsouza/zoxide/)
+#
+
+# Add zoxide to your shell.
+eval "$(zoxide init zsh)"
+
+#
+# [homebrew](https://brew.sh/)
+#
+
+# Use tuna mirror.
 if [[ "$(uname -s)" == "Linux" ]]; then BREW_TYPE="linuxbrew"; else BREW_TYPE="homebrew"; fi
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles/bottles"
 
+#
+# [nvm](https://github.com/nvm-sh/nvm/)
+#
 
-## [nvm](https://github.com/nvm-sh/nvm/)
-
-# Ensure that the NVM_DIR does not contain a trailing slash
+# Ensure that the NVM_DIR does not contain a trailing slash.
 export NVM_DIR="$HOME/.nvm"
 
-# This loads nvm
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"
-# This loads nvm bash_completion
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
+# This loads nvm.
+[[ -s "/usr/local/opt/nvm/nvm.sh" ]] && . "/usr/local/opt/nvm/nvm.sh"
+# This loads nvm bash_completion.
+[[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ]] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
 
-# Use taobao mirror
-export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
+# Use taobao mirror.
+export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node"
 
+#
+# [pyenv](https://github.com/pyenv/pyenv/)
+#
 
-## [pyenv](https://github.com/pyenv/pyenv/)
-
+# Use taobao mirror.
+export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python"
 # If set, does not append the SHA2 checksum of the file to the mirror URL.
 export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
-# Use taobao mirror
-export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python/"
 
-# Use tuna mirror for anaconda temporarily
-# Or you can download package then move it to `~/.pyenv/cache/` by yourself
-# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/"
+# Use tuna mirror for anaconda temporarily,
+# or you can download package then move it to `~/.pyenv/cache/` by yourself.
+# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive"
 
-# Add pyenv init to your shell to enable shims and autocompletion.
-# Please make sure this is placed toward the end of the shell configuration file since it manipulates PATH during the initialization.
-if command -v pyenv 1>/dev/null 2>&1; then
-  # eval "$(pyenv init -)"  # This may be slow.
-  eval "$(pyenv init - --no-rehash)"  # This may be fast.
-fi
+# Add `pyenv` into your shell by running the output of `pyenv init -` to enable autocompletion and all subcommands.
+eval "$(pyenv init -)"
