@@ -1,0 +1,6 @@
+{
+  "path": {
+    "pip.conf": ["~", ".config", "pip"],
+    ".condarc": ["~"]
+  }
+}

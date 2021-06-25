@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+# ==================================================
+# Welcome to the DotPub!
+#
+# Maintainer:
+#   KevInZhao <hellozhaowenkai@gmail.com>
+# Description:
+#   Serve fruity dotfiles for Homebrew formulae to everyone in the DotPub!
+# Note:
+#   You need Python 3.9 or greater to run the following script.
+# Sections:
+#   - Test and Debug
+# Repository:
+#   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
+# References:
+#   - [Dotbot](https://github.com/anishathalye/dotbot/)
+# ==================================================
+
+
+import subprocess
+
+
+# ==================================================
+# Test and Debug
+# ==================================================
+
+
+def run(command):
+    return subprocess.Popen(command)
+
+
+def main():
+    command = [
+        "python",
+        "publican.py",
+        # "-v",
+        # "menu",
+        # "order",
+        # "cancel",
+        # "tab",
+        "-h",
+        # "vim",
+        # "--all",
+    ]
+    run(command).communicate()
+
+
+if __name__ == "__main__":
+    main()
