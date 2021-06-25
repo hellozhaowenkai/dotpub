@@ -1,4 +1,8 @@
 {
+  "name": "Git Large File Storage",
+  "version": "1.0.0",
+  "description": "Git extension for versioning large files",
+  "website": "https://github.com/git-lfs/git-lfs/",
   "path": {
     "*": ["~"]
   }

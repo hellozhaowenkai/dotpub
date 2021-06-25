@@ -1,4 +1,8 @@
 {
+  "name": "Git",
+  "version": "1.0.0",
+  "description": "Distributed revision control system",
+  "website": "https://git-scm.com/",
   "path": {
     "*": ["~"]
   }

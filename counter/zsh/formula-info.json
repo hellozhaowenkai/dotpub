@@ -1,4 +1,8 @@
 {
+  "name": "Zsh",
+  "version": "1.0.0",
+  "description": "UNIX shell (command interpreter)",
+  "website": "https://www.zsh.org/",
   "path": {
     ".z*": ["~"],
     "my-patches.zsh": ["~", ".oh-my-zsh", "custom"]

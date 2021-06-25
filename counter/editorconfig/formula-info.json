@@ -1,4 +1,8 @@
 {
+  "name": "EditorConfig",
+  "version": "1.0.0",
+  "description": "Maintain consistent coding style between multiple editors",
+  "website": "https://editorconfig.org/",
   "path": {
     "*": ["~"]
   }

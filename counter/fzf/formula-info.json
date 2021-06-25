@@ -1,4 +1,8 @@
 {
+  "name": "Fzf",
+  "version": "1.0.0",
+  "description": "Command-line fuzzy finder written in Go",
+  "website": "https://github.com/junegunn/fzf/",
   "path": {
     "*": ["~"]
   }

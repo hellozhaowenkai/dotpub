@@ -168,7 +168,7 @@ def list_formula(formula):
     print("▶", f"{formula}")
 
     formula_info = get_formula_info(COUNTER_PATH / formula / FORMULA_INFO_FILENAME)
-    for info in ["name", "version", "description", "repository"]:
+    for info in ["name", "version", "description", "website"]:
         print(f"{info}:", formula_info.get(info, "Not found."))
 
     print("")

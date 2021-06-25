@@ -1,4 +1,8 @@
 {
+  "name": "Zoxide",
+  "version": "1.0.0",
+  "description": "Shell extension to navigate your filesystem faster",
+  "website": "https://github.com/ajeetdsouza/zoxide/",
   "path": {
     "*": ["~"]
   }

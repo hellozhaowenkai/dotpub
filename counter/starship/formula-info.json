@@ -1,4 +1,8 @@
 {
+  "name": "Starship",
+  "version": "1.0.0",
+  "description": "Cross-shell prompt for astronauts",
+  "website": "https://starship.rs/",
   "path": {
     "*": ["~", ".config"]
   }

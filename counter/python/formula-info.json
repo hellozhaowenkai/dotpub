@@ -1,4 +1,8 @@
 {
+  "name": "Python",
+  "version": "1.0.0",
+  "description": "Interpreted, interactive, object-oriented programming language",
+  "website": "https://www.python.org/",
   "path": {
     "pip.conf": ["~", ".config", "pip"],
     ".condarc": ["~"]

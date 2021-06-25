@@ -1,4 +1,8 @@
 {
+  "name": "Powerlevel10k",
+  "version": "1.0.0",
+  "description": "A Zsh Theme",
+  "website": "https://github.com/romkatv/powerlevel10k/",
   "path": {
     "*": ["~"]
   }

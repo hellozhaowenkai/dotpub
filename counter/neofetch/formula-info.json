@@ -1,4 +1,8 @@
 {
+  "name": "Neofetch",
+  "version": "1.0.0",
+  "description": "Fast, highly customisable system info script",
+  "website": "https://github.com/dylanaraps/neofetch/",
   "path": {
     "*": ["~", ".config", "neofetch"]
   }

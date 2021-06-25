@@ -1,4 +1,8 @@
 {
+  "name": "Vim",
+  "version": "1.0.0",
+  "description": "Vi 'workalike' with many additional features",
+  "website": "https://www.vim.org/",
   "path": {
     ".*vimrc": ["~"],
     "init.vim": ["~", ".config", "nvim"],
