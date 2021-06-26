@@ -20,6 +20,7 @@
 # Repository:
 #   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
+#   - [Mackup](https://github.com/lra/mackup/)
 #   - [Dotbot](https://github.com/anishathalye/dotbot/)
 # ==================================================
 
@@ -179,8 +180,8 @@ def add_list_parser(subparsers):
 
     parser = subparsers.add_parser(
         "menu",
-        description="Show the supported formulae info.",
-        help="show the supported formulae info",
+        description="List the supported formulae.",
+        help="list the supported formulae",
     )
 
     parser = build_common_cmd(parser, list_formula)

@@ -14,6 +14,7 @@
 # Repository:
 #   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
+#   - [Mackup](https://github.com/lra/mackup/)
 #   - [Dotbot](https://github.com/anishathalye/dotbot/)
 # ==================================================
 
