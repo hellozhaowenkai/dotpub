@@ -1,0 +1,9 @@
+{
+  "name": "Prettier",
+  "version": "1.0.0",
+  "description": "Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML",
+  "website": "https://prettier.io/",
+  "path": {
+    "*": ["~"]
+  }
+}
