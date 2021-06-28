@@ -1,6 +1,8 @@
 [user]
 	name = KevInZhao
 	email = hellozhaowenkai@gmail.com
+[init]
+	defaultBranch = main
 [core]
 	editor = vim
 	ignorecase = false
