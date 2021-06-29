@@ -17,7 +17,9 @@
 #   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
 #   - [What to put in your startup files](https://zsh.sourceforge.io/Guide/zshguide02.html)
-#   - [template](~/.oh-my-zsh/templates/zshrc.zsh-template)
+#   - [Options](http://zsh.sourceforge.net/Doc/Release/Options.html)
+#   - [Zsh Line Editor](http://zsh.sourceforge.net/Doc/Release/Zsh-Line-Editor.html)
+#   - [Template](~/.oh-my-zsh/templates/zshrc.zsh-template)
 # ==================================================
 
 
@@ -130,12 +132,6 @@ export KEYTIMEOUT=1
 # ==================================================
 # Zsh Configuration
 # ==================================================
-
-#
-# [Options](http://zsh.sourceforge.net/Doc/Release/Options.html)
-#
-
-# `setopt` shows all options whose settings are changed from the default.
 
 #
 # Changing Directories.

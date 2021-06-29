@@ -15,7 +15,7 @@
 #   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
 #   - [Z shell](https://zsh.sourceforge.io/)
-#   - [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh/)
+#   - [Oh-My-Zsh](https://github.com/ohmyzsh/ohmyzsh/)
 #   - [Zsh Guide](https://zshguide.readthedocs.io/)
 # ==================================================
 
@@ -25,20 +25,61 @@
 # ==================================================
 
 #
+# Oh-My-Zsh stuff.
+#
+
+# Installation.
+function z-omz-install {
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+  return 0
+}
+
+#
+# Homebrew stuff.
+#
+
+# Installation.
+function z-brew-install {
+  if [[ "$(uname -s)" == "Linux" ]] {
+    # Dependencies for Debian or Ubuntu.
+    sudo apt-get install build-essential procps curl file git
+  } else {
+    # Command Line Tools (CLT) for Xcode.
+    xcode-select --install
+  }
+
+  if [[ $1 == tuna ]] {
+    # Use tuna mirror.
+    git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git ~/brew-tuna
+    /bin/bash ~/brew-tuna/install.sh
+    rm -rf ~/brew-tuna
+  } else {
+    # The script explains what it will do and then pauses before it does it.
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  }
+
+  # You’re done! Try installing a package:
+  brew install hello
+
+  return 0
+}
+
+#
 # NPM stuff.
 #
 
-# CNPM: Private npm registry and web for Company.
-alias cnpm="npm --registry=https://registry.npm.taobao.org \
+# Private npm registry and web for Company.
+alias z-npm-taobao="npm --registry=https://registry.npm.taobao.org \
   --cache=$HOME/.npm/.cache/cnpm \
   --disturl=https://npm.taobao.org/mirrors/node \
   --userconfig=$HOME/.cnpmrc"
 
 # Fetch all outdated npm global packages list.
-alias npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
+alias z-npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
 
 # Upgrade outdated npm global packages.
-function npm-upgrade {
+function z-npm-upgrade {
   for package ($(npm-update)) {
     echo "upgrading $package"
     npm -g install $package
@@ -52,7 +93,7 @@ function npm-upgrade {
 #
 
 # Work together with other machines.
-function share {
+function z-share {
   local host=dell
   local action=pull
   if (($+2)) {
@@ -87,8 +128,11 @@ function share {
 # Git stuff.
 #
 
+# Git LFS requires global configuration changes once per-machine.
+alias z-git-lfs-install="git lfs install"
+
 # Easy push.
-function git-push {
+function z-git-push {
   local remote_branch=$(date "+%Y%m%d-%H%M%S")
   (($+1)) && remote_branch=$1
 
@@ -99,7 +143,7 @@ function git-push {
 }
 
 # Easy pull.
-function git-pull {
+function z-git-pull {
   local remote_branch=master
   (($+1)) && remote_branch=$1
 
@@ -110,7 +154,7 @@ function git-pull {
 }
 
 # Easy fetch.
-function git-fetch {
+function z-git-fetch {
   local remote_branch=master
   (($+1)) && remote_branch=$1
 
@@ -127,3 +171,61 @@ function git-fetch {
 
   return 0
 }
+
+# Easy commit.
+function z-git-commit {
+  local right_hour=21
+  (($+1)) && right_hour=$1
+  local right_minute=30
+  (($+2)) && right_minute=$2
+  local right_date=$(date -R -v -1d -v "$right_hour"H -v "$right_minute"M)
+
+  [[ -z $right_date ]] && return 1
+
+  echo "right_date: $right_date"
+  echo "start..." \
+    && export GIT_AUTHOR_DATE="$right_date" \
+    && export GIT_COMMITTER_DATE="$right_date" \
+    && git commit \
+  && echo "done."
+
+  return 0
+}
+
+# Easy amend.
+function z-git-amend {
+  local right_date=$(git log --pretty=format:"%ad" HEAD -1)
+
+  echo "right_date: $right_date"
+  echo "start..." \
+    && export GIT_COMMITTER_DATE="$right_date" \
+    && git commit --amend \
+  && echo "done."
+
+  return 0
+}
+
+# Easy organize.
+function z-git-organize {
+  git filter-branch -f --env-filter '
+    GIT_AUTHOR_NAME=KevInZhao
+    GIT_COMMITTER_NAME=KevInZhao
+    GIT_COMMITTER_DATE="$(git log --pretty=format:'%ad' --max-count=1 $GIT_COMMIT)"
+  ' -- --all
+
+  return 0
+}
+
+#
+# Fzf stuff.
+#
+
+# To install useful key bindings and fuzzy completion.
+alias z-fzf-install="/usr/local/opt/fzf/install"
+
+#
+# MySQL stuff.
+#
+
+# Installation.
+alias z-mysql-install="mysql_secure_installation"
