@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -47,7 +47,9 @@ BACKUPS_DIRNAME = "backups"
 BACKUPS_PATH = ROOT_PATH / BACKUPS_DIRNAME
 
 FORMULA_INFO_FILENAME = "formula-info.json"
-SUPPORTED_FORMULAE = [child.name for child in COUNTER_PATH.iterdir() if child.is_dir()]
+SUPPORTED_FORMULAE = sorted(
+    [child.name for child in COUNTER_PATH.iterdir() if child.is_dir()]
+)
 
 LOGS_DIRNAME = "logs"
 LOGS_PATH = ROOT_PATH / LOGS_DIRNAME
@@ -64,20 +66,18 @@ def get_target_formulae(args):
     if args.all:
         return SUPPORTED_FORMULAE
 
-    elif args.formulae:
+    if args.formulae:
         right, wrong = [], []
         for formula in args.formulae:
             container = right if formula in SUPPORTED_FORMULAE else wrong
             container.append(formula)
 
         if wrong:
-            LOGGER.error(f"those formulae {wrong} are not supported.")
-
+            LOGGER.warning(f"those formulae {wrong} are not supported.")
         return right
 
-    else:
-        LOGGER.error("please chose at last one formula to manage.")
-        exit(1)
+    LOGGER.error("please chose at last one formula to manage.")
+    exit(1)
 
 
 def get_formula_info(info_path):
@@ -136,7 +136,7 @@ def yield_dotfile(formula):
             }
 
 
-def build_common_cmd(parser, action):
+def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
     parser.add_argument(
         "formulae",
         type=str,
@@ -152,11 +152,19 @@ def build_common_cmd(parser, action):
     )
 
     def handler(args):
+        if pre_processor is not None:
+            pre_processor(args)
+
         formulae = get_target_formulae(args)
         for formula in formulae:
             action(formula)
 
-    parser.set_defaults(func=handler)
+        if post_processor is not None:
+            post_processor(args)
+
+        exit(0)
+
+    parser.set_defaults(formulae=[], handler=handler)
     return parser
 
 
@@ -184,7 +192,19 @@ def add_list_parser(subparsers):
         help="list the supported formulae",
     )
 
-    parser = build_common_cmd(parser, list_formula)
+    parser.add_argument(
+        "--simplify",
+        action="store_true",
+        help="simplifies the output",
+    )
+
+    def pre_processor(args):
+        if args.simplify:
+            formulae = get_target_formulae(args)
+            print(" ".join(formulae))
+            exit(0)
+
+    parser = build_common_cmd(parser, list_formula, pre_processor=pre_processor)
     return parser
 
 
@@ -414,7 +434,7 @@ def main():
 
     # Parse the arguments and call whatever function was selected.
     args = parser.parse_args()
-    args.func(args)
+    args.handler(args)
 
 
 if __name__ == "__main__":

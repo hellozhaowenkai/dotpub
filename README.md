@@ -16,7 +16,7 @@ DotPub makes mounting your dotfiles as easy as drinking:
 
 ```bash
 # Find the DotPub.
-git clone https://github.com/hellozhaowenkai/dotpub/
+git clone https://github.com/hellozhaowenkai/dotpub.git
 
 # In to the DotPub.
 cd dotpub
@@ -52,7 +52,7 @@ subcommands:
 ### Menu (List)
 
 ```man
-usage: publican.py menu [-h] [--all] [formulae ...]
+usage: publican.py menu [-h] [--simplify] [--all] [formulae ...]
 
 List the supported formulae.
 
@@ -61,6 +61,7 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+  --simplify  simplifies the output
   --all       manage all of the formulae those be supported default
 ```
 
@@ -130,7 +131,7 @@ All Vim stuff are store in `dotpub/counter/vim` folder:
 2. `mv dotpub/backups/vim/.vimrc ~/.vimrc`
 3. `rm dotpub/backups/vim/*`
 
-## References:
+## References
 
 Thanks to:
 
