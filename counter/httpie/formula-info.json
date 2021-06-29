@@ -1,0 +1,9 @@
+{
+  "name": "HTTPie",
+  "version": "1.0.0",
+  "description": "User-friendly cURL replacement (command-line HTTP client)",
+  "website": "https://httpie.io/",
+  "path": {
+    "*": ["~"]
+  }
+}

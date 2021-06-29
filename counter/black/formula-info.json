@@ -1,0 +1,9 @@
+{
+  "name": "Black",
+  "version": "1.0.0",
+  "description": "Python code formatter",
+  "website": "https://black.readthedocs.io/",
+  "path": {
+    "*": ["~"]
+  }
+}

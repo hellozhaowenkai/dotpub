@@ -1,0 +1,9 @@
+{
+  "name": "RabbitMQ",
+  "version": "1.0.0",
+  "description": "Messaging broker",
+  "website": "https://rabbitmq.com/",
+  "path": {
+    "*": ["~"]
+  }
+}

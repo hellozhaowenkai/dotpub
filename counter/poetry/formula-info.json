@@ -1,0 +1,9 @@
+{
+  "name": "Poetry",
+  "version": "1.0.0",
+  "description": "Python package management tool",
+  "website": "https://python-poetry.org/",
+  "path": {
+    "*": ["~"]
+  }
+}

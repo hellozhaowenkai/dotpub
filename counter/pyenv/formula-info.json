@@ -1,0 +1,9 @@
+{
+  "name": "Pyenv",
+  "version": "1.0.0",
+  "description": "Python version management",
+  "website": "https://github.com/pyenv/pyenv/",
+  "path": {
+    "*": ["~"]
+  }
+}

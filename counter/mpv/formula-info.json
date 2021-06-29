@@ -1,0 +1,9 @@
+{
+  "name": "Mpv",
+  "version": "1.0.0",
+  "description": "Media player based on MPlayer and mplayer2",
+  "website": "https://mpv.io/",
+  "path": {
+    "*": ["~"]
+  }
+}

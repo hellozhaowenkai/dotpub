@@ -1,0 +1,9 @@
+{
+  "name": "Neovim",
+  "version": "1.0.0",
+  "description": "Ambitious Vim-fork focused on extensibility and agility",
+  "website": "https://neovim.io/",
+  "path": {
+    "*": ["~"]
+  }
+}

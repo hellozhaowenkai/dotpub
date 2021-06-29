@@ -1,0 +1,9 @@
+{
+  "name": "Zsh History Substring Search",
+  "version": "1.0.0",
+  "description": "Zsh port of Fish shell's history search",
+  "website": "https://github.com/zsh-users/zsh-history-substring-search/",
+  "path": {
+    "*": ["~"]
+  }
+}

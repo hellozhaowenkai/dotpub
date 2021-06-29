@@ -1,0 +1,9 @@
+{
+  "name": "Htop",
+  "version": "1.0.0",
+  "description": "Improved top (interactive process viewer)",
+  "website": "https://htop.dev/",
+  "path": {
+    "*": ["~"]
+  }
+}

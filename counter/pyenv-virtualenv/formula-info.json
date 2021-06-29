@@ -1,0 +1,9 @@
+{
+  "name": "Pyenv Virtualenv",
+  "version": "1.0.0",
+  "description": "Pyenv plugin to manage virtualenv",
+  "website": "https://github.com/pyenv/pyenv-virtualenv/",
+  "path": {
+    "*": ["~"]
+  }
+}

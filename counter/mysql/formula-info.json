@@ -1,0 +1,9 @@
+{
+  "name": "MySQL",
+  "version": "1.0.0",
+  "description": "Open source relational database management system",
+  "website": "https://mysql.com/",
+  "path": {
+    "*": ["~"]
+  }
+}

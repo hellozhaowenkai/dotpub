@@ -1,0 +1,9 @@
+{
+  "name": "YouTube DL",
+  "version": "1.0.0",
+  "description": "Download YouTube videos from the command-line",
+  "website": "https://youtube-dl.org/",
+  "path": {
+    "*": ["~"]
+  }
+}

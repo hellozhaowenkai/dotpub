@@ -1,0 +1,9 @@
+{
+  "name": "Nginx",
+  "version": "1.0.0",
+  "description": "HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server",
+  "website": "https://nginx.org/",
+  "path": {
+    "*": ["~"]
+  }
+}

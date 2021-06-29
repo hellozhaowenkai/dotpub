@@ -1,0 +1,9 @@
+{
+  "name": "Zsh AutoSuggestions",
+  "version": "1.0.0",
+  "description": "Fish-like fast/unobtrusive autosuggestions for Zsh",
+  "website": "https://github.com/zsh-users/zsh-autosuggestions/",
+  "path": {
+    "*": ["~"]
+  }
+}

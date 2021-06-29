@@ -1,0 +1,9 @@
+{
+  "name": "Tree",
+  "version": "1.0.0",
+  "description": "Display directories as trees (with optional color/HTML output)",
+  "website": "http://mama.indstate.edu/users/ice/tree/",
+  "path": {
+    "*": ["~"]
+  }
+}
