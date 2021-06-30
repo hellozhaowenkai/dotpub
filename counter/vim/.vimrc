@@ -235,7 +235,7 @@ set backspace       =indent,eol,start
 " Enable the use of the mouse in all modes.
 set mouse           =a
 " Vim will use the system clipboard for all yank, delete, change and put operations.
-set clipboard      ^=unnamed,unnamedplus
+set clipboard      +=unnamed,unnamedplus
 " All folds are open when starting.
 set nofoldenable
 " Keep the cursor in the same column (if possible) when scrolling.
@@ -421,9 +421,9 @@ command! -nargs=+ Replace call s:Replace(<f-args>)
 " See the difference between the current buffer and the file it was loaded from, thus the changes you made.
 command! Compare vertical new | set buftype=nofile | read ++edit # | 0delete _ | diffthis | wincmd p | diffthis
 
-" When editing a file, always jump to the last known cursor position.
+" When editing a file, always jump to the last known cursor position, except git stuff.
 autocmd BufReadPost *
-  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'commit'
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &filetype !~# 'git'
   \ |   execute "normal! g'\""
   \ | endif
 
@@ -440,8 +440,8 @@ endif
 " Set the `mapleaders` before custom mappings!
 "
 
-" The default leader is `\`, but I prefer `<Space>` as it's in a standard location.
-let g:mapleader = "\<Space>"
+" The default leader is `\` (backslash).
+let g:mapleader = "\<Bslash>"
 
 "
 " Overview of which map command works in which mode.
@@ -464,6 +464,9 @@ let g:mapleader = "\<Space>"
 " Using `noremap` is preferred, because it's clearer that recursive mapping is (mostly) disabled.
 "
 
+" To make sure <Leader> doesn't have any mapping beforehand.
+noremap <Leader> <Nop>
+
 " Hi.
 nnoremap <Leader>h :echomsg <SID>Hi('KevInZhao')<CR>
 
@@ -475,21 +478,21 @@ nnoremap Y y$
 nnoremap <silent> <Leader>l :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
 " Delete the word before the cursor, with undo support.
-inoremap <Leader>w <C-G>u<C-W>
+noremap! <C-W> <C-G>u<C-W>
 " Delete all entered characters before the cursor in the current line, with undo support.
-inoremap <Leader>u <C-G>u<C-U>
+noremap! <C-U> <C-G>u<C-U>
 
 " Toggle the Paste mode.
 set pastetoggle  =<Leader>p
 " Delete, and without influence to the system clipboard.
-vnoremap <Leader>d "_d
+noremap <Leader>d "_d
 " Cut to the system clipboard.
-vnoremap <Leader>x "+d
+noremap <Leader>x "+d
 " Copy to the system clipboard.
-vnoremap <Leader>c "+y
+noremap <Leader>c "+y
 " Paste form the system clipboard, and don't auto-indent.
-nnoremap <Leader>v <Leader>p"+p<Leader>p
-lnoremap <Leader>v <C-R><C-O>+
+noremap <Leader>v <Leader>p"+p<Leader>p
+noremap! <C-V> <C-R><C-O>+
 
 " Find the word under the cursor in the entire file.
 nnoremap <Leader>f :/<C-R><C-W><CR>Gn
@@ -508,7 +511,7 @@ nnoremap <Leader>bd :bdelete<CR>
 
 if g:is_nvim
   " Trigger completion.
-  inoremap <silent><expr> <Leader><Tab> coc#refresh()
+  inoremap <silent><expr> <C-Space> coc#refresh()
   " GoTo code navigation.
   nmap <silent> <Leader>gr <Plug>(coc-references)
   " Symbol renaming.
