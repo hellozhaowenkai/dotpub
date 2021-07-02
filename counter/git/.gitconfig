@@ -10,6 +10,8 @@
 	excludesfile = ~/.gitignore_global
 [commit]
 	template = ~/.gitmessage
+[pull]
+	rebase = false
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
