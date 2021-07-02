@@ -188,23 +188,23 @@ filetype plugin indent on
 set termguicolors           " Enable true color.
 colorscheme gruvbox         " Load color scheme.
 syntax enable               " Enable syntax highlighting.
-set background   =dark      " Vim will try to use colors that look good on a dark background.
+set background=dark         " Vim will try to use colors that look good on a dark background.
 
 set expandtab               " Use the appropriate number of spaces to insert a <Tab>.
 set smarttab                " A <Tab> in front of a line inserts blanks according to `shiftwidth`.
 set smartindent             " Do smart autoindenting when starting a new line.
 set autoindent              " Copy indent from current line when starting a new line.
 set copyindent              " Copy the structure of the existing lines indent when autoindenting a new line.
-set tabstop      =4         " Number of spaces that a <Tab> in the file counts for.
-set softtabstop  =4         " Number of spaces that a <Tab> counts for while performing editing operations.
+set tabstop=4               " Number of spaces that a <Tab> in the file counts for.
+set softtabstop=4           " Number of spaces that a <Tab> counts for while performing editing operations.
 set shiftround              " Round indent to multiple of `shiftwidth`.
 
 set showmode                " If in Insert, Replace or Visual mode put a message on the last line.
 set showcmd                 " Show (partial) command in the last line of the screen.
 set showmatch               " When a bracket is inserted, briefly jump to the matching one.
-set scrolloff    =1         " Minimal number of screen lines to keep above and below the cursor.
-set laststatus   =2         " Always show a status line.
-set display     +=lastline  " As much as possible of the last line in a window will be displayed.
+set scrolloff=1             " Minimal number of screen lines to keep above and below the cursor.
+set laststatus=2            " Always show a status line.
+set display+=lastline       " As much as possible of the last line in a window will be displayed.
 
 set incsearch               " While typing a search command, show where the pattern, as it was typed so far, matches.
 set hlsearch                " When there is a previous search pattern, highlight all its matches.
@@ -227,25 +227,25 @@ set cursorline              " Highlight the text line of the cursor.
 " When a file has been detected to have been changed outside of Vim, automatically read it again.
 set autoread
 " Set the character encoding used inside Vim.
-set encoding        =utf-8
+set encoding=utf-8
 " The bell will not be rung anyway.
-set belloff         =all
+set belloff=all
 " Make your <BS> or <Del> key does do what you want.
-set backspace       =indent,eol,start
+set backspace=indent,eol,start
 " Enable the use of the mouse in all modes.
-set mouse           =a
+set mouse=a
 " Vim will use the system clipboard for all yank, delete, change and put operations.
-set clipboard      +=unnamed,unnamedplus
+set clipboard^=unnamed,unnamedplus
 " All folds are open when starting.
 set nofoldenable
 " Keep the cursor in the same column (if possible) when scrolling.
 set nostartofline
 " Numbers that start with a zero will not be considered to be octal when used as a [count].
-set nrformats      -=octal
+set nrformats-=octal
 " Where it makes sense, remove a comment leader when joining lines.
-set formatoptions  +=j
+set formatoptions+=j
 " Don't give `ins-completion-menu` messages.
-set shortmess      +=c
+set shortmess+=c
 
 "
 " Make your Vim more smooth.
@@ -258,9 +258,9 @@ set lazyredraw
 " Time out when part of a keyboard code has been received.
 set ttimeout
 " The time in milliseconds that is waited for a keyboard code sequence to complete.
-set ttimeoutlen  =100
+set ttimeoutlen=100
 " If this many milliseconds nothing is typed the swap file will be written to disk.
-set updatetime   =300
+set updatetime=300
 
 "
 " Wrap lines at convenient points.
@@ -273,7 +273,7 @@ set linebreak
 " Every wrapped line will continue visually indented, thus preserving horizontal blocks of text.
 set breakindent
 " Display the `showbreak` value before applying the additional indent.
-set breakindentopt  =sbr
+set breakindentopt=sbr
 " Show `↪` at the beginning of wrapped lines.
 let &showbreak = '↪'
 
@@ -284,9 +284,9 @@ let &showbreak = '↪'
 " The command-line completion operates in an enhanced mode.
 set wildmenu
 " Don't scan current and included files when completion is active.
-set complete     -=i
+set complete-=i
 " When using <C-D> to list matching tags, the kind of tag and the file of the tag is listed.
-set wildoptions  +=tagfile
+set wildoptions+=tagfile
 " Search upward for tags files in a directory tree.
 setglobal tags-=./tags tags-=./tags; tags^=./tags;
 
@@ -295,11 +295,11 @@ setglobal tags-=./tags tags-=./tags; tags^=./tags;
 "
 
 " Remember global variables that start with an uppercase letter, and don't contain a lowercase letter.
-set viminfo         ^=!
+set viminfo^=!
 " Don't remember options and mappings local to a window or buffer (not global values for local options).
-set viewoptions     -=options
+set viewoptions-=options
 " Don't remember all options and mappings (also global values for local options).
-set sessionoptions  -=options
+set sessionoptions-=options
 
 "
 " Temporary files.
@@ -483,7 +483,7 @@ noremap! <C-W> <C-G>u<C-W>
 noremap! <C-U> <C-G>u<C-U>
 
 " Toggle the Paste mode.
-set pastetoggle  =<Leader>p
+set pastetoggle=<Leader>p
 " Delete, and without influence to the system clipboard.
 noremap <Leader>d "_d
 " Cut to the system clipboard.
