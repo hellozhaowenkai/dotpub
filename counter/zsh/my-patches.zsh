@@ -207,11 +207,15 @@ function z-git-amend {
 
 # Easy organize.
 function z-git-organize {
+  local range=--all
+  (($+1)) && range=$1
+
+  echo "range: $range"
   git filter-branch -f --env-filter '
     GIT_AUTHOR_NAME=KevInZhao
     GIT_COMMITTER_NAME=KevInZhao
     GIT_COMMITTER_DATE="$(git log --pretty=format:'%ad' --max-count=1 $GIT_COMMIT)"
-  ' -- --all
+  ' -- $range
 
   return 0
 }
