@@ -25,7 +25,7 @@ These are mostly guidelines, not rules. Use your best judgment, and feel free to
 ## What should I know before I get started?
 
 First.
-We encourage you to read this project's `Contributing Guidelines` (you are here), its [`LICENSE`](LICENSE), its [`NOTICE`](NOTICE), and its [`README.md`](README.md).
+We encourage you to read this project's [Contributing Guidelines](CONTRIBUTING.md) (you are here), its [`LICENSE`](LICENSE), its [`NOTICE`](NOTICE), and its [`README.md`](README.md).
 
 Then.
 This project and everyone participating in it is governed by the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
