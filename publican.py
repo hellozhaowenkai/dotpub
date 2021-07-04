@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -55,6 +55,8 @@ LOGS_DIRNAME = "logs"
 LOGS_PATH = ROOT_PATH / LOGS_DIRNAME
 LOGS_FILENAME = "dotpub.log"
 LOGGER = logging.getLogger()
+
+ANSWERS = {"init_backups": False}
 
 
 # ==================================================
@@ -109,10 +111,43 @@ def get_formula_info(info_path):
     return exit(1)
 
 
+def request_confirm(problem_flag):
+    message = """request confirm:
+    Y): yes, and do not ask again for same problem anyway.
+    y): yes, do it just for this time.
+    n): no, quit and I will do it by myself.
+(type your answer then press <Enter>): """
+    answer = input(message)
+
+    if answer == "Y":
+        ANSWERS[problem_flag] = True
+        return True
+    elif answer == "y":
+        return True
+    elif answer == "n":
+        return False
+    else:
+        LOGGER.warning(f"{answer}: unknown input, please type again.")
+        return request_confirm(problem_flag)
+
+
 def init_backups(formula):
     backup_dir_path = BACKUPS_PATH / formula
     backup_dir_path.mkdir(parents=True, exist_ok=True)
-    for backup_path in backup_dir_path.iterdir():
+    backup_paths = list(backup_dir_path.iterdir())
+
+    if len(backup_paths) > 0:
+        problem_flag = "init_backups"
+        if not ANSWERS[problem_flag]:
+            LOGGER.warning(
+                f"{backup_dir_path} is not empty, do you want to empty it anyway?"
+            )
+            if not request_confirm(problem_flag):
+                exit(0)
+
+        LOGGER.warning(f"{backup_dir_path} is not empty, but empty it anyway.")
+
+    for backup_path in backup_paths:
         backup_path.unlink()
 
 
