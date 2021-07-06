@@ -61,9 +61,9 @@ let g:node_host_prog = '~/.nvm/versions/node/neovim/bin/node'
 let g:python3_host_prog = '~/.pyenv/versions/neovim/bin/python'
 
 " A helper function can improve the vim-plug conditional activation readability.
-function! g:Condition(is_enabled, ...)
+function! g:Condition(enabled, ...)
   let l:options = get(a:000, 0, {})
-  return a:is_enabled ? l:options : extend(l:options, {'on': [], 'for': []})
+  return a:enabled ? l:options : extend(l:options, {'on': [], 'for': []})
 endfunction
 
 
@@ -103,7 +103,7 @@ call plug#begin(g:Path('plugged/'))
 
 " Retro groove color scheme for Vim.
 Plug 'morhetz/gruvbox'
-" Enables italic text.
+" Enable italic text.
 let g:gruvbox_italic = 1
 
 " A collection of language packs for Vim.
