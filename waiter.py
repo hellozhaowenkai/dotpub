@@ -27,7 +27,9 @@ import subprocess
 # ==================================================
 
 
-def run(command):
+def run(
+    command,
+):
     return subprocess.Popen(command)
 
 
@@ -43,6 +45,7 @@ def main():
         "-h",
         # "vim",
         # "--all",
+        # "--simplify",
     ]
     run(command).communicate()
 

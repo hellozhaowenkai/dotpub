@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -55,6 +55,8 @@ LOGS_DIRNAME = "logs"
 LOGS_PATH = ROOT_PATH / LOGS_DIRNAME
 LOGS_FILENAME = "dotpub.log"
 LOGGER = logging.getLogger()
+SIMPLIFY = False
+NORMAL = -1
 
 ANSWERS = {"init_backups": False}
 
@@ -62,6 +64,21 @@ ANSWERS = {"init_backups": False}
 # ==================================================
 # Utilities
 # ==================================================
+
+
+def log(message, level=NORMAL, disabled=False):
+    """Colored output by ANSI escape codes."""
+
+    color_map = {
+        NORMAL: 4,  # Blue
+        logging.INFO: 2,  # Green
+        logging.WARNING: 3,  # Yellow
+        logging.ERROR: 1,  # Red
+    }
+
+    print(f"\033[3{color_map[level]}m", end="", flush=True)
+    print(message) if (level <= NORMAL or disabled) else LOGGER.log(level, message)
+    print("\033[0m", end="", flush=True)
 
 
 def get_target_formulae(args):
@@ -75,10 +92,10 @@ def get_target_formulae(args):
             container.append(formula)
 
         if wrong:
-            LOGGER.warning(f"those formulae {wrong} are not supported.")
+            log(f"those formulae {wrong} are not supported.", logging.WARNING)
         return right
 
-    LOGGER.error("please chose at last one formula to manage.")
+    log("please chose at last one formula to manage.", logging.ERROR)
     exit(1)
 
 
@@ -98,13 +115,13 @@ def get_formula_info(info_path):
         # assert jsonschema.validate(formula_info, formula_info_schema), message
 
     except FileNotFoundError:
-        LOGGER.error(f"{info_path}: File not found.")
+        log(f"{info_path}: File not found.", logging.ERROR)
     except json.decoder.JSONDecodeError:
-        LOGGER.error(f"{info_path}: JSON decode error.")
+        log(f"{info_path}: JSON decode error.", logging.ERROR)
     except KeyError as e:
-        LOGGER.error(f"{info_path}: Key {e} not found.")
+        log(f"{info_path}: Key {e} not found.", logging.ERROR)
     except AssertionError as e:
-        LOGGER.error(f"{info_path}: Format error, {e}.")
+        log(f"{info_path}: Format error, {e}.", logging.ERROR)
 
     else:
         return formula_info
@@ -127,7 +144,7 @@ def request_confirm(problem_flag):
     elif answer == "n":
         return False
     else:
-        LOGGER.warning(f"{answer}: unknown input, please type again.")
+        log(f"{answer}: unknown input, please type again.", logging.WARNING)
         return request_confirm(problem_flag)
 
 
@@ -139,13 +156,14 @@ def init_backups(formula):
     if len(backup_paths) > 0:
         problem_flag = "init_backups"
         if not ANSWERS[problem_flag]:
-            LOGGER.warning(
-                f"{backup_dir_path} is not empty, do you want to empty it anyway?"
+            log(
+                f"{backup_dir_path} is not empty, do you want to empty it anyway?",
+                logging.WARNING,
             )
             if not request_confirm(problem_flag):
                 exit(0)
 
-        LOGGER.warning(f"{backup_dir_path} is not empty, but empty it anyway.")
+        log(f"{backup_dir_path} is not empty, but empty it anyway.", logging.WARNING)
 
     for backup_path in backup_paths:
         backup_path.unlink()
@@ -209,11 +227,11 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
 
 
 def list_formula(formula):
-    print("▶", f"{formula}")
+    log(f"▶ {formula}")
 
     formula_info = get_formula_info(COUNTER_PATH / formula / FORMULA_INFO_FILENAME)
     for info in ["name", "version", "description", "website"]:
-        print(f"{info}:", formula_info.get(info, "Not found."))
+        print(f"{info}:".ljust(15), formula_info.get(info, "Not found."))
 
     print("")
 
@@ -249,38 +267,38 @@ def add_list_parser(subparsers):
 
 
 def mount_dotfile(counter, system, backup=None):
-    LOGGER.info(f"{counter.name}: doing resolve...")
+    log(f"{counter.name}: doing resolve...", logging.INFO)
     if system.resolve() == counter:
         return False
 
-    LOGGER.info(f"{counter.name}: doing backup...")
+    log(f"{counter.name}: doing backup...", logging.INFO)
     if system.is_symlink():
         backup.symlink_to(system.resolve())
         system.unlink()
     elif system.is_file():
         system.replace(backup)
     elif system.exists():
-        LOGGER.error(f"{system.name}: unknown existed backup dotfile.")
+        log(f"{system.name}: unknown existed backup dotfile.", logging.ERROR)
         return False
     else:
-        LOGGER.warning(f"{system}: system file not exists.")
+        log(f"{system}: system file not exists.", logging.WARNING)
         system.parent.mkdir(parents=True, exist_ok=True)
 
-    LOGGER.info(f"{counter.name}: doing mount...")
+    log(f"{counter.name}: doing mount...", logging.INFO)
     system.symlink_to(counter)
 
     return True
 
 
 def mount_formula(formula):
-    print("▶", f"{formula}")
-    LOGGER.info(f"{formula}: mount start...")
+    log(f"▶ {formula}")
+    log(f"{formula}: mount start...", logging.INFO)
 
     init_backups(formula)
     for config in yield_dotfile(formula):
         mount_dotfile(config["counter"], config["system"], config["backup"])
 
-    LOGGER.info(f"{formula}: mount done.")
+    log(f"{formula}: mount done.", logging.INFO)
     print("")
 
 
@@ -303,36 +321,36 @@ def add_mount_parser(subparsers):
 
 
 def unmount_dotfile(counter, system, backup=None):
-    LOGGER.info(f"{counter.name}: doing resolve...")
+    log(f"{counter.name}: doing resolve...", logging.INFO)
     if system.resolve() != counter:
         return False
 
-    LOGGER.info(f"{counter.name}: doing unmount...")
+    log(f"{counter.name}: doing unmount...", logging.INFO)
     system.unlink(missing_ok=True)
 
-    LOGGER.info(f"{counter.name}: doing backup...")
+    log(f"{counter.name}: doing backup...", logging.INFO)
     if backup.is_symlink():
         system.symlink_to(backup.resolve())
     elif backup.is_file():
         backup.replace(system)
     elif backup.exists():
-        LOGGER.error(f"{backup.name}: unknown existed backup dotfile.")
+        log(f"{backup.name}: unknown existed backup dotfile.", logging.ERROR)
         return False
     else:
-        LOGGER.warning(f"{backup}: backup file not exists.")
+        log(f"{backup}: backup file not exists.", logging.WARNING)
 
     return True
 
 
 def unmount_formula(formula):
-    print("▶", f"{formula}")
-    LOGGER.info(f"{formula}: unmount start...")
+    log(f"▶ {formula}")
+    log(f"{formula}: unmount start...", logging.INFO)
 
     for config in yield_dotfile(formula):
         unmount_dotfile(config["counter"], config["system"], config["backup"])
     init_backups(formula)
 
-    LOGGER.info(f"{formula}: unmount done.")
+    log(f"{formula}: unmount done.", logging.INFO)
     print("")
 
 
@@ -355,38 +373,47 @@ def add_unmount_parser(subparsers):
 
 
 def status_dotfile(counter, system, backup=None):
-    print("@", f"dotfile: {counter.name}")
+    width = 10
 
-    print("#", f"counter: {counter}")
-    counter_status = "supported"
-    print("#", f"status: {counter_status}")
+    print("@", "dotfile:".ljust(width), end="")
+    print(counter.name)
 
-    print("$", f"system: {system}")
+    print("#", "counter:".ljust(width), end="")
+    if not SIMPLIFY:
+        print(counter)
+        print("#", "status:".ljust(width), end="")
+    log("enabled", logging.INFO, True)
+
+    print("$", "system:".ljust(width), end="")
+    if not SIMPLIFY:
+        print(system)
+        print("$", "status:".ljust(width), end="")
     if system.is_symlink() or system.is_file():
         if system.resolve() == counter:
-            system_status = "mounted"
+            log("mounted", logging.INFO, True)
         else:
-            system_status = "not-mounted"
+            log("not-mounted", logging.WARNING, True)
     elif system.exists():
-        system_status = "unknown-file"
+        log("unknown-file", logging.ERROR, True)
     else:
-        system_status = "not-exists"
-    print("$", f"status: {system_status}")
+        log("not-exists", logging.WARNING, True)
 
-    print("%", f"backup: {backup}")
+    print("%", "backup:".ljust(width), end="")
+    if not SIMPLIFY:
+        print(backup)
+        print("%", "status:".ljust(width), end="")
     if backup.is_symlink() or backup.is_file():
-        backup_status = "backed-up"
+        log("backed-up", logging.INFO, True)
     elif backup.exists():
-        backup_status = "unknown-file"
+        log("unknown-file", logging.ERROR, True)
     else:
-        backup_status = "not-exists"
-    print("%", f"status: {backup_status}")
+        log("not-exists", logging.WARNING, True)
 
     print("")
 
 
 def status_formula(formula):
-    print("▶", f"{formula}")
+    log(f"▶ {formula}")
 
     for config in yield_dotfile(formula):
         status_dotfile(config["counter"], config["system"], config["backup"])
@@ -403,7 +430,17 @@ def add_status_parser(subparsers):
         help="show the supported formulae status",
     )
 
-    parser = build_common_cmd(parser, status_formula)
+    parser.add_argument(
+        "--simplify",
+        action="store_true",
+        help="simplifies the output",
+    )
+
+    def pre_processor(args):
+        global SIMPLIFY
+        SIMPLIFY = args.simplify
+
+    parser = build_common_cmd(parser, status_formula, pre_processor=pre_processor)
     return parser
 
 
@@ -440,8 +477,6 @@ def init_top_parser():
 
 
 def init_logger():
-    global LOGGER
-
     LOGGER.setLevel(logging.INFO)
     formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
 

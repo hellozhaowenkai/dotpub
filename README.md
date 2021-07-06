@@ -104,7 +104,7 @@ optional arguments:
 ### Tab (Status)
 
 ```man
-usage: publican.py tab [-h] [--all] [formulae ...]
+usage: publican.py tab [-h] [--simplify] [--all] [formulae ...]
 
 Show the supported formulae status.
 
@@ -113,6 +113,7 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
+  --simplify  simplifies the output
   --all       manage all of the formulae those be supported default
 ```
 
