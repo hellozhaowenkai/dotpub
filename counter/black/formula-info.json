@@ -4,6 +4,6 @@
   "description": "Python code formatter",
   "website": "https://black.readthedocs.io/",
   "path": {
-    "*": ["~"]
+    "*": ["~", ".config"]
   }
 }
