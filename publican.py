@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.0"
+VERSION = "1.3.1"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -46,6 +46,7 @@ COUNTER_PATH = ROOT_PATH / COUNTER_DIRNAME
 BACKUPS_DIRNAME = "backups"
 BACKUPS_PATH = ROOT_PATH / BACKUPS_DIRNAME
 
+FORMULA_FLAG = "\uF7A5"  # Nerd Fonts: nf-mdi-glass_mug
 FORMULA_INFO_FILENAME = "formula-info.json"
 SUPPORTED_FORMULAE = sorted(
     [child.name for child in COUNTER_PATH.iterdir() if child.is_dir()]
@@ -227,7 +228,7 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
 
 
 def list_formula(formula):
-    log(f"▶ {formula}")
+    log(f"{FORMULA_FLAG} {formula}")
 
     formula_info = get_formula_info(COUNTER_PATH / formula / FORMULA_INFO_FILENAME)
     for info in ["name", "version", "description", "website"]:
@@ -291,7 +292,7 @@ def mount_dotfile(counter, system, backup=None):
 
 
 def mount_formula(formula):
-    log(f"▶ {formula}")
+    log(f"{FORMULA_FLAG} {formula}")
     log(f"{formula}: mount start...", logging.INFO)
 
     init_backups(formula)
@@ -343,7 +344,7 @@ def unmount_dotfile(counter, system, backup=None):
 
 
 def unmount_formula(formula):
-    log(f"▶ {formula}")
+    log(f"{FORMULA_FLAG} {formula}")
     log(f"{formula}: unmount start...", logging.INFO)
 
     for config in yield_dotfile(formula):
@@ -413,7 +414,7 @@ def status_dotfile(counter, system, backup=None):
 
 
 def status_formula(formula):
-    log(f"▶ {formula}")
+    log(f"{FORMULA_FLAG} {formula}")
 
     for config in yield_dotfile(formula):
         status_dotfile(config["counter"], config["system"], config["backup"])
