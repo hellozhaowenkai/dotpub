@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.1"
+VERSION = "1.3.2"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -170,13 +170,15 @@ def init_backups(formula):
         backup_path.unlink()
 
 
-def yield_dotfile(formula):
+def yield_dotfiles(formula):
     counter_dir_path = COUNTER_PATH / formula
     backup_dir_path = BACKUPS_PATH / formula
 
     formula_info = get_formula_info(counter_dir_path / FORMULA_INFO_FILENAME)
     for (pattern, path_segments) in formula_info.get("path", {}).items():
         for counter_path in counter_dir_path.glob(pattern):
+            if counter_path.match(".DS_Store"):
+                continue
             if counter_path.match(FORMULA_INFO_FILENAME):
                 continue
 
@@ -296,7 +298,7 @@ def mount_formula(formula):
     log(f"{formula}: mount start...", logging.INFO)
 
     init_backups(formula)
-    for config in yield_dotfile(formula):
+    for config in yield_dotfiles(formula):
         mount_dotfile(config["counter"], config["system"], config["backup"])
 
     log(f"{formula}: mount done.", logging.INFO)
@@ -347,7 +349,7 @@ def unmount_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
     log(f"{formula}: unmount start...", logging.INFO)
 
-    for config in yield_dotfile(formula):
+    for config in yield_dotfiles(formula):
         unmount_dotfile(config["counter"], config["system"], config["backup"])
     init_backups(formula)
 
@@ -416,7 +418,7 @@ def status_dotfile(counter, system, backup=None):
 def status_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
 
-    for config in yield_dotfile(formula):
+    for config in yield_dotfiles(formula):
         status_dotfile(config["counter"], config["system"], config["backup"])
 
     print("")
