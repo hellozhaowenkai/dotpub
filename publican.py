@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.2"
+VERSION = "1.3.3"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -116,13 +116,13 @@ def get_formula_info(info_path):
         # assert jsonschema.validate(formula_info, formula_info_schema), message
 
     except FileNotFoundError:
-        log(f"{info_path}: File not found.", logging.ERROR)
+        log(f"{info_path}: file not found.", logging.ERROR)
     except json.decoder.JSONDecodeError:
         log(f"{info_path}: JSON decode error.", logging.ERROR)
     except KeyError as e:
-        log(f"{info_path}: Key {e} not found.", logging.ERROR)
+        log(f"{info_path}: key {e} not found.", logging.ERROR)
     except AssertionError as e:
-        log(f"{info_path}: Format error, {e}.", logging.ERROR)
+        log(f"{info_path}: format error, {e}.", logging.ERROR)
 
     else:
         return formula_info
@@ -173,14 +173,42 @@ def init_backups(formula):
 def yield_dotfiles(formula):
     counter_dir_path = COUNTER_PATH / formula
     backup_dir_path = BACKUPS_PATH / formula
-
     formula_info = get_formula_info(counter_dir_path / FORMULA_INFO_FILENAME)
+
+    yielded_dotfiles = set()
     for (pattern, path_segments) in formula_info.get("path", {}).items():
         for counter_path in counter_dir_path.glob(pattern):
             if counter_path.match(".DS_Store"):
                 continue
             if counter_path.match(FORMULA_INFO_FILENAME):
                 continue
+            if counter_path.is_dir():
+                continue
+
+            if counter_path.is_symlink():
+                log(
+                    f"{counter_path}: symlinked dotfile is not supported",
+                    logging.WARNING,
+                )
+                continue
+            else:
+                counter_path = counter_path.resolve()
+
+            if counter_path in yielded_dotfiles:
+                log(
+                    f"{counter_path}: duplicate dotfile, please checkout your path section specified in {FORMULA_INFO_FILENAME}.",
+                    logging.WARNING,
+                )
+                continue
+
+            if not str(counter_path).startswith(str(counter_dir_path)):
+                log(
+                    f"{counter_path}: outside dotfile, please checkout your path specified in {FORMULA_INFO_FILENAME}.",
+                    logging.WARNING,
+                )
+                continue
+
+            yielded_dotfiles.add(counter_path)
 
             system_path = pathlib.Path(*path_segments, counter_path.name).expanduser()
             backup_path = backup_dir_path / counter_path.name
