@@ -130,6 +130,16 @@ Plug 'tpope/vim-vinegar'
 " Enable repeating supported plugin maps with `.`.
 Plug 'tpope/vim-repeat'
 
+" A Vim plugin to display the indention levels with thin vertical lines.
+Plug 'Yggdroot/indentLine'
+" Change indent char.
+let g:indentLine_char = '▏'
+
+" Make the yanked region apparent!
+Plug 'machakann/vim-highlightedyank', g:Condition(g:is_idea)
+" Optimize highlight duration, assign a time in milliseconds.
+let g:highlightedyank_highlight_duration = 200
+
 " Make your Vim / Neovim as smart as VSCode.
 Plug 'neoclide/coc.nvim', g:Condition(g:is_nvim, {'branch': 'release'})
 " Path to node executable to start coc service.
@@ -152,23 +162,13 @@ let g:ale_fix_on_save = 1
 let g:ale_fixers = {'python': ['black'], '*': ['prettier']}
 
 " Lean & Mean status / tabline for Vim that's light as air.
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline', g:Condition(g:is_nvim)
 " Integrating with powerline fonts.
 let g:airline_powerline_fonts = 1
 " Integrating with ALE for displaying error information in the status bar.
 let g:airline#extensions#ale#enabled = 1
 " Smarter tab line.
 let g:airline#extensions#tabline#enabled = 1
-
-" A Vim plugin to display the indention levels with thin vertical lines.
-Plug 'Yggdroot/indentLine'
-" Change indent char.
-let g:indentLine_char = '▏'
-
-" Make the yanked region apparent!
-Plug 'machakann/vim-highlightedyank', g:Condition(g:is_idea)
-" Optimize highlight duration, assign a time in milliseconds.
-let g:highlightedyank_highlight_duration = 200
 
 "
 " List ends here.
