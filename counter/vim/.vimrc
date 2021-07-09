@@ -46,6 +46,9 @@ function! g:Path(relative_path)
   return l:absolute_path
 endfunction
 
+" Check whether the current editor started with IntelliJ IDEs by IdeaVim.
+let g:is_idea = exists('&ideavimsupport')
+
 " Check whether the current editor started with Neovim.
 let g:is_nvim = has('nvim')
 
@@ -161,6 +164,11 @@ let g:airline#extensions#tabline#enabled = 1
 Plug 'Yggdroot/indentLine'
 " Change indent char.
 let g:indentLine_char = '▏'
+
+" Make the yanked region apparent!
+Plug 'machakann/vim-highlightedyank', g:Condition(g:is_idea)
+" Optimize highlight duration, assign a time in milliseconds.
+let g:highlightedyank_highlight_duration = 200
 
 "
 " List ends here.
@@ -349,6 +357,14 @@ else
   let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
 endif
 
+"
+" IdeaVim only.
+"
+
+if g:is_idea
+  " Join command will be performed via IDE.
+  set ideajoin
+endif
 
 " ==================================================
 " Functions
