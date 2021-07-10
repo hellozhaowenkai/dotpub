@@ -1,4 +1,8 @@
 {
   "coc.preferences.extensionUpdateCheck": "daily",
-  "diagnostic.displayByAle": true
+  "diagnostic.displayByAle": true,
+  "diagnostic.virtualText": true,
+  "suggest.numberSelect": true,
+  "yank.enableCompletion": false,
+  "yank.highlight.duration": 200
 }
