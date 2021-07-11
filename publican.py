@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.3"
+VERSION = "1.3.4"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -100,7 +100,8 @@ def get_target_formulae(args):
     exit(1)
 
 
-def get_formula_info(info_path):
+def get_formula_info(formula):
+    info_path = COUNTER_PATH / formula / FORMULA_INFO_FILENAME
 
     try:
         with info_path.open() as fp:
@@ -172,8 +173,7 @@ def init_backups(formula):
 
 def yield_dotfiles(formula):
     counter_dir_path = COUNTER_PATH / formula
-    backup_dir_path = BACKUPS_PATH / formula
-    formula_info = get_formula_info(counter_dir_path / FORMULA_INFO_FILENAME)
+    formula_info = get_formula_info(formula)
 
     yielded_dotfiles = set()
     for (pattern, path_segments) in formula_info.get("path", {}).items():
@@ -211,7 +211,7 @@ def yield_dotfiles(formula):
             yielded_dotfiles.add(counter_path)
 
             system_path = pathlib.Path(*path_segments, counter_path.name).expanduser()
-            backup_path = backup_dir_path / counter_path.name
+            backup_path = BACKUPS_PATH / formula / counter_path.name
 
             yield {
                 "counter": counter_path,
@@ -260,7 +260,7 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
 def list_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
 
-    formula_info = get_formula_info(COUNTER_PATH / formula / FORMULA_INFO_FILENAME)
+    formula_info = get_formula_info(formula)
     for info in ["name", "version", "description", "website"]:
         print(f"{info}:".ljust(15), formula_info.get(info, "Not found."))
 
