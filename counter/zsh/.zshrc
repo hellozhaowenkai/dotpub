@@ -123,8 +123,8 @@ bindkey -M viins "^p" history-substring-search-up
 bindkey -M viins "^n" history-substring-search-down
 
 # Allow Ctrl-]/Ctrl-[ for partially accept the suggestion up to the point that the cursor moves to.
-bindkey -M viins "^]" forward-word
-bindkey -M viins "^[" backward-kill-word
+bindkey -M viins "^]" vi-forward-word
+bindkey -M viins "^[" vi-backward-kill-word
 
 # Make the switch between modes quicker when using vi-mode.
 export KEYTIMEOUT=1
