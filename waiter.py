@@ -6,7 +6,7 @@
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
 # Description:
-#   Serve fruity dotfiles for Homebrew formulae to everyone in the DotPub!
+#   Serve fruity dotfiles for Homebrew fans!
 # Note:
 #   You need Python 3.9 or greater to run the following script.
 # Sections:

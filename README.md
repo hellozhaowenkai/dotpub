@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/github/license/hellozhaowenkai/dotpub?label=License)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-🍻 Serve fruity dotfiles for Homebrew formulae to everyone in the DotPub! 🤩
+🍻 Serve fruity dotfiles for Homebrew fans! 🤩
 
 - [Quickstart](#quickstart)
 - [Usage](#usage)
@@ -24,13 +24,13 @@ DotPub makes mounting your dotfiles as easy as drinking:
 # Find the DotPub.
 git clone https://github.com/hellozhaowenkai/dotpub.git
 
-# In to the DotPub.
+# Into the DotPub.
 cd dotpub
 
 # Then order a cup of drink from the publican.
 python publican.py order vim
 
-# Or drink all things we served.
+# Or just have a taste of all drinks we served!
 python publican.py order --all
 ```
 
@@ -39,7 +39,7 @@ python publican.py order --all
 ```man
 usage: publican.py [-h] [-v] action ...
 
-Serve fruity dotfiles for Homebrew formulae to everyone in the DotPub!
+Serve fruity dotfiles for Homebrew fans!
 
 optional arguments:
   -h, --help     show this help message and exit
@@ -140,10 +140,12 @@ All Vim stuff are store in `dotpub/counter/vim` folder:
 
 ## References
 
-Thanks to:
+The idea is inspired by:
 
-- [Mackup](https://github.com/lra/mackup/)
-- [Dotbot](https://github.com/anishathalye/dotbot/)
+- [Mackup](https://github.com/lra/mackup/): Keep your application settings in sync.
+- [Dotbot](https://github.com/anishathalye/dotbot/): A tool that bootstraps your dotfiles.
+
+Thanks to all of them!
 
 ## Contributing
 

@@ -33,7 +33,7 @@
 [project]
 name = "DotPub"
 version = "1.3.4"
-description = "Serve fruity dotfiles for Homebrew formulae to everyone in the DotPub!"
+description = "Serve fruity dotfiles for Homebrew fans!"
 maintainers = [{name = "KevInZhao", email = "hellozhaowenkai@gmail.com"}]
 
 keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
