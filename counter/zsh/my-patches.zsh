@@ -80,7 +80,7 @@ alias z-npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
 
 # Upgrade outdated npm global packages.
 function z-npm-upgrade {
-  for package ($(npm-update)) {
+  for package ($(z-npm-update)) {
     echo "upgrading $package"
     npm -g install $package
   }
