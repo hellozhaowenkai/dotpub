@@ -1,6 +1,6 @@
 {
   "name": "Node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Platform built on V8 to build network applications",
   "website": "https://nodejs.org/",
   "path": {

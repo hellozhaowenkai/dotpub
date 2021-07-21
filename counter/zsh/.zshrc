@@ -266,11 +266,11 @@ eval "$(zoxide init zsh)"
 # [homebrew](https://brew.sh/)
 #
 
-# Use tuna mirror.
-if [[ "$(uname -s)" == "Linux" ]]; then BREW_TYPE="linuxbrew"; else BREW_TYPE="homebrew"; fi
-export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles/bottles"
+# Use TUNA mirror.
+# if [[ "$(uname -s)" == "Linux" ]]; then BREW_TYPE="linuxbrew"; else BREW_TYPE="homebrew"; fi
+# export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+# export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
+# export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles/bottles/"
 
 #
 # [nvm](https://github.com/nvm-sh/nvm/)
@@ -284,21 +284,21 @@ export NVM_DIR="$HOME/.nvm"
 # This loads nvm bash_completion.
 [[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ]] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
 
-# Use taobao mirror.
-export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node"
+# Use TaoBao mirror.
+# export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
 
 #
 # [pyenv](https://github.com/pyenv/pyenv/)
 #
 
-# Use taobao mirror.
-export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python"
+# Use TaoBao mirror.
+# export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python/"
 # If set, does not append the SHA2 checksum of the file to the mirror URL.
-export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
+# export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
 
-# Use tuna mirror for anaconda temporarily,
+# Use TUNA mirror for Anaconda temporarily,
 # or you can download package then move it to `~/.pyenv/cache/` by yourself.
-# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive"
+# export PYTHON_BUILD_MIRROR_URL="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/"
 
 # Add `pyenv` into your shell by running the output of `pyenv init -` to enable autocompletion and all subcommands.
 eval "$(pyenv init -)"
