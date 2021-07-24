@@ -1,4 +1,5 @@
+@vue/cli
 eslint
+npm-check-updates
 prettier
 typescript
-@vue/cli
