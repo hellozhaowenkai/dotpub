@@ -6,7 +6,7 @@
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
 # Description:
-#   Serve fruity dotfiles for Homebrew fans!
+#   Serve fruity dotfiles for brew fans!
 # Note:
 #   You need Python 3.9 or greater to run the following script.
 # Sections:
@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.4"
+VERSION = "1.3.5"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -495,7 +495,7 @@ def init_top_parser():
     """Create the top-level parser."""
 
     parser = argparse.ArgumentParser(
-        description="Serve fruity dotfiles for Homebrew fans!",
+        description="Serve fruity dotfiles for brew fans!",
         epilog=f"%(prog)s, version: {VERSION}, maintainer: KevInZhao.",
     )
     parser.add_argument(

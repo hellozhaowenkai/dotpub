@@ -1,3 +1,5 @@
+![Social Preview](https://repository-images.githubusercontent.com/380521993/394c2d67-915b-40ac-bfa7-901f93a4f4a1)
+
 # DotPub
 
 [![Maintainer](https://img.shields.io/badge/Maintainer-KevInZhao-42b983.svg)](https://github.com/hellozhaowenkai/)
@@ -5,7 +7,7 @@
 [![License](https://img.shields.io/github/license/hellozhaowenkai/dotpub?label=License)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
-🍻 Serve fruity dotfiles for Homebrew fans! 🤩
+🍻 Serve fruity dotfiles for brew fans! 🤩
 
 - [Quickstart](#quickstart)
 - [Usage](#usage)
@@ -39,7 +41,7 @@ python publican.py order --all
 ```man
 usage: publican.py [-h] [-v] action ...
 
-Serve fruity dotfiles for Homebrew fans!
+Serve fruity dotfiles for brew fans!
 
 optional arguments:
   -h, --help     show this help message and exit
@@ -70,6 +72,9 @@ optional arguments:
   --simplify  simplifies the output
   --all       manage all of the formulae those be supported default
 ```
+
+> Want to work with brew?  
+> Try `brew info $(python publican.py menu --all --simplify)` now!
 
 ### Order (Mount)
 
@@ -144,6 +149,11 @@ The idea is inspired by:
 
 - [Mackup](https://github.com/lra/mackup/): Keep your application settings in sync.
 - [Dotbot](https://github.com/anishathalye/dotbot/): A tool that bootstraps your dotfiles.
+
+The social preview is designed by:
+
+- [Canva](https://www.canva.com/): Collaborate & Create Amazing Graphic Design for Free
+- [Figma](https://www.figma.com/): The Collaborative Interface Design Tool
 
 Thanks to all of them!
 

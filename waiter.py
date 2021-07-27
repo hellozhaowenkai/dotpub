@@ -6,7 +6,7 @@
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
 # Description:
-#   Serve fruity dotfiles for Homebrew fans!
+#   Serve fruity dotfiles for brew fans!
 # Note:
 #   You need Python 3.9 or greater to run the following script.
 # Sections:
