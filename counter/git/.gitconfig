@@ -8,6 +8,7 @@
 	ignorecase = false
 	autocrlf = input
 	excludesfile = ~/.gitignore_global
+	safecrlf = true
 [commit]
 	template = ~/.gitmessage
 [pull]
