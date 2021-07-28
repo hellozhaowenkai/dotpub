@@ -4,6 +4,7 @@
 
 [![Maintainer](https://img.shields.io/badge/Maintainer-KevInZhao-42b983.svg)](https://github.com/hellozhaowenkai/)
 [![Version](https://img.shields.io/github/v/tag/hellozhaowenkai/dotpub?label=Version)](https://github.com/hellozhaowenkai/dotpub/tags/)
+[![Python](https://img.shields.io/badge/Python-%3E%3D3.9-success)](https://www.python.org/)
 [![License](https://img.shields.io/github/license/hellozhaowenkai/dotpub?label=License)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
@@ -20,7 +21,7 @@
 
 DotPub makes mounting your dotfiles as easy as drinking:
 
-> Note: You need Python 3.9 or greater to run the command below.
+> NOTE: You need Python 3.9 or greater to run the script below.
 
 ```bash
 # Find the DotPub.
@@ -35,6 +36,8 @@ python publican.py order vim
 # Or just have a taste of all drinks we served!
 python publican.py order --all
 ```
+
+> NOTE: I'll regularly add new configurations so keep an eye on this repository as it grows and optimizes.
 
 ## Usage
 
@@ -126,22 +129,22 @@ optional arguments:
 
 Let's take `Vim` as an example.
 
-All Vim stuff are store in `dotpub/counter/vim` folder:
+All Vim stuff are store in `counter/vim/` folder:
 
 - `formula-info.json` tell us where the config files should put to.
 - others such as `.vimrc` are all Vim's config files.
 
 ### Mount
 
-1. `rm dotpub/backups/vim/*`
-2. `mv ~/.vimrc dotpub/backups/vim/.vimrc`
-3. `ln -s dotpub/counter/vim/.vimrc ~/.vimrc`
+1. `rm backups/vim/*`
+2. `mv ~/.vimrc backups/vim/.vimrc`
+3. `ln -s counter/vim/.vimrc ~/.vimrc`
 
 ### Unmount
 
 1. `rm ~/.vimrc`
-2. `mv dotpub/backups/vim/.vimrc ~/.vimrc`
-3. `rm dotpub/backups/vim/*`
+2. `mv backups/vim/.vimrc ~/.vimrc`
+3. `rm backups/vim/*`
 
 ## References
 
