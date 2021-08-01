@@ -288,6 +288,13 @@ export NVM_DIR="$HOME/.nvm"
 # export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
 
 #
+# [poetry](https://github.com/python-poetry/poetry/)
+#
+
+# Enable tab completion.
+# poetry completions zsh > $(brew --prefix)/share/zsh/site-functions/_poetry
+
+#
 # [pyenv](https://github.com/pyenv/pyenv/)
 #
 
