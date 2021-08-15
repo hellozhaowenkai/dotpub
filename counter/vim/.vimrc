@@ -498,6 +498,9 @@ noremap! <C-W> <C-G>u<C-W>
 " Delete all entered characters before the cursor in the current line, with undo support.
 noremap! <C-U> <C-G>u<C-U>
 
+" Toggle relative line numbers.
+noremap <Leader>rnu :set relativenumber!<CR>
+
 " Toggle the Paste mode.
 set pastetoggle=<Leader>p
 " Delete, and without influence to the system clipboard.
