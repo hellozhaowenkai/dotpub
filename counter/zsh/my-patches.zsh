@@ -50,7 +50,7 @@ function z-brew-install {
   }
 
   if [[ $1 == tuna ]] {
-    # Use tuna mirror.
+    # Use TUNA mirror.
     git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git ~/brew-tuna
     /bin/bash ~/brew-tuna/install.sh
     rm -rf ~/brew-tuna
@@ -210,6 +210,8 @@ function z-git-organize {
   local range=--all
   (($+1)) && range=$1
 
+  # <commit_start>..<commit_end> -> (<commit_start>, <commit_end>]
+  # e.g. `<commit_id>..HEAD`, `origin..HEAD`
   echo "range: $range"
   git filter-branch -f --env-filter '
     GIT_AUTHOR_NAME=KevInZhao
@@ -225,7 +227,7 @@ function z-git-organize {
 #
 
 # To install useful key bindings and fuzzy completion.
-alias z-fzf-install="/usr/local/opt/fzf/install"
+alias z-fzf-install="$(brew --prefix)/opt/fzf/install"
 
 #
 # MySQL stuff.
@@ -233,3 +235,67 @@ alias z-fzf-install="/usr/local/opt/fzf/install"
 
 # Installation.
 alias z-mysql-install="mysql_secure_installation"
+
+#
+# Python stuff.
+#
+
+# Say good bye to Pyhton 2.
+alias python="python3"
+alias pip="pip3"
+
+#
+# Poetry stuff.
+#
+
+# Enable tab completion.
+alias z-poetry-insatll="poetry completions zsh > $(brew --prefix)/share/zsh/site-functions/_poetry"
+
+#
+# Powerlevel10k stuff.
+#
+
+# Installation for Homebrew.
+alias z-p10k-install="brew install romkatv/powerlevel10k/powerlevel10k"
+
+#
+# .DS_Store stuff.
+#
+
+function z-ds-delete {
+  if [[ $1 == "" ]] {
+    echo "folder: $(pwd), start..."
+
+    # Delete a DS_Store file for a specific folder.
+    find . –name '.DS_Store' –type f –delete
+  } elif [[ $1 == "--all" ]] {
+    echo "folder: /, start..."
+
+    # Delete all DS_Store files from your Mac.
+    sudo find / -name '.DS_Store' -depth -exec rm {} \;
+  } else {
+    echo 'error: only accpet `--all` argument!'
+    return 1
+  }
+
+  echo "done."
+  return 0
+}
+
+#
+# X11 stuff.
+#
+
+# Enable trusted X11 forwarding.
+alias xssh="open --hide -a XQuartz && ssh -Y"
+
+# Test.
+function z-xssh-test {
+  local host=dell
+  (($+1)) && host=$1
+
+  echo "host: $host"
+  xssh $host 'echo "hello, world" | xclip -selection clipboard'
+
+  return 0
+}

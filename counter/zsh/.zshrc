@@ -114,9 +114,9 @@ source $ZSH/oh-my-zsh.sh
 # ==================================================
 
 # Load plugins installed by Homebrew.
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # Allow Ctrl-P/Ctrl-N for navigate history integrated with zsh-history-substring-search.
 bindkey -M viins "^p" history-substring-search-up
@@ -170,7 +170,7 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_IGNORE_SPACE
 
 # Disable history when not use iTerm.
-if [[ "$TERM_PROGRAM" != "iTerm.app" ]]; then
+if [[ "$LC_TERMINAL" != "iTerm2" ]]; then
   # Do read old history from file.
   fc -RI
   # Do not write new history to file.
@@ -187,6 +187,12 @@ fi
 
 # You may need to manually set your language environment.
 export LANG=en_US.UTF-8
+
+# You may need to manually set your timezone environment.
+export TZ=Asia/Shanghai
+
+# You may need to manually set your display environment.
+# export DISPLAY=:0.0
 
 # Preferred editor for local and remote sessions.
 if [[ -n $SSH_CONNECTION ]]; then
@@ -217,7 +223,7 @@ fi
 #
 
 # Show information when use iTerm.
-if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+if [[ "$LC_TERMINAL" == "iTerm2" ]]; then
   neofetch
 fi
 
@@ -250,10 +256,10 @@ source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 #
 
 # Enable fuzzy auto-completion.
-[[ $- == *i* ]] && source "/usr/local/opt/fzf/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2> /dev/null
 
 # Enable key bindings.
-source "/usr/local/opt/fzf/shell/key-bindings.zsh"
+source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
 
 #
 # [zoxide](https://github.com/ajeetdsouza/zoxide/)
@@ -280,9 +286,9 @@ eval "$(zoxide init zsh)"
 export NVM_DIR="$HOME/.nvm"
 
 # This loads nvm.
-[[ -s "/usr/local/opt/nvm/nvm.sh" ]] && . "/usr/local/opt/nvm/nvm.sh"
+[[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]] && . "$(brew --prefix)/opt/nvm/nvm.sh"
 # This loads nvm bash_completion.
-[[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ]] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"
+[[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ]] && . "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
 
 # Use TaoBao mirror.
 # export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"

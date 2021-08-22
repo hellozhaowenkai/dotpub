@@ -21,6 +21,15 @@
 # ==================================================
 
 #
+# [homebrew](https://brew.sh/)
+#
+
+if [[ "$(uname -s)" == "Linux" ]]; then
+  # Add Homebrew to your PATH.
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
+#
 # [pyenv](https://github.com/pyenv/pyenv/)
 #
 
