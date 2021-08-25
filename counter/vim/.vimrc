@@ -39,7 +39,7 @@ function! g:Path(relative_path)
   let l:absolute_path = g:vim_path . a:relative_path
 
   " Create directory if needed.
-  if matchend(a:relative_path, '/') > 1 && !isdirectory(l:absolute_path) && exists('*mkdir')
+  if matchend(a:relative_path, '/$') > 1 && !isdirectory(l:absolute_path) && exists('*mkdir')
     call mkdir(l:absolute_path, 'p')
   endif
 
@@ -194,9 +194,9 @@ set nocompatible
 filetype plugin indent on
 
 set termguicolors           " Enable true color.
+set background=dark         " Vim will try to use colors that look good on a dark background.
 colorscheme gruvbox         " Load color scheme.
 syntax enable               " Enable syntax highlighting.
-set background=dark         " Vim will try to use colors that look good on a dark background.
 
 set expandtab               " Use the appropriate number of spaces to insert a <Tab>.
 set smarttab                " A <Tab> in front of a line inserts blanks according to `shiftwidth`.
@@ -385,6 +385,7 @@ function! s:PlugSetup() abort
   if empty(glob(l:plug_path))
     let l:plug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     silent execute '!curl -fLo ' . l:plug_path . ' --create-dirs ' . l:plug_url
+    silent! source $MYVIMRC
   else
     PlugUpgrade
   endif
