@@ -514,6 +514,11 @@ noremap <Leader>c "+y
 noremap <Leader>v <Leader>p"+p<Leader>p
 noremap! <C-V> <C-R><C-O>+
 
+" Make the X selection synchronize with the unnamed register.
+noremap <silent> <Leader>xi :call system('xclip -selection clipboard -in', @")<CR>
+" Make the unnamed register synchronize with the X selection.
+noremap <silent> <Leader>xo :let @" = system('xclip -selection clipboard -out')<CR>
+
 " Find the word under the cursor in the entire file.
 nnoremap <Leader>f :/<C-R><C-W><CR>Gn
 " Replace the word under the cursor in the entire file, with ask for confirmation.
