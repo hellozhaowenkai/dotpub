@@ -4,6 +4,6 @@
   "description": "Media player based on MPlayer and mplayer2",
   "website": "https://mpv.io/",
   "path": {
-    "*": ["~"]
+    "*": ["~", ".config", "mpv"]
   }
 }
