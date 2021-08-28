@@ -1,0 +1,9 @@
+{
+  "name": "Xclip",
+  "version": "1.0.0",
+  "description": "Access X11 clipboards from the command-line",
+  "website": "https://github.com/astrand/xclip/",
+  "path": {
+    "*": ["~"]
+  }
+}
