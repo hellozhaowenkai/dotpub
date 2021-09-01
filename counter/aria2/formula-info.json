@@ -4,6 +4,6 @@
   "description": "Download with resuming and segmented downloading",
   "website": "https://aria2.github.io/",
   "path": {
-    "*": ["~"]
+    "*": ["~", ".aria2"]
   }
 }
