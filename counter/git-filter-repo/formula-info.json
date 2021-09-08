@@ -1,0 +1,9 @@
+{
+  "name": "Git Filter Repo",
+  "version": "1.0.0",
+  "description": "Quickly rewrite git repository history",
+  "website": "https://github.com/newren/git-filter-repo/",
+  "path": {
+    "*": ["~"]
+  }
+}
