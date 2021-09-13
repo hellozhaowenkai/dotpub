@@ -63,26 +63,26 @@ subcommands:
 ### Menu (List)
 
 ```man
-usage: publican.py menu [-h] [--simplify] [--all] [formulae ...]
+usage: publican.py menu [-h] [-s] [-a] [formulae ...]
 
 List the supported formulae.
 
 positional arguments:
-  formulae    chose the formulae those you want to manage
+  formulae        chose the formulae those you want to manage
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --simplify  simplifies the output
-  --all       manage all of the formulae those be supported default
+  -h, --help      show this help message and exit
+  -s, --simplify  simplifies the output
+  -a, --all       manage all of the formulae those be supported default
 ```
 
 > Want to work with brew?  
-> Try `brew info $(python publican.py menu --all --simplify)` now!
+> Try `brew info $(python publican.py menu -as)` now!
 
 ### Order (Mount)
 
 ```man
-usage: publican.py order [-h] [--all] [formulae ...]
+usage: publican.py order [-h] [-a] [formulae ...]
 
 Mount your formulae config files.
 
@@ -91,13 +91,13 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  --all       manage all of the formulae those be supported default
+  -a, --all   manage all of the formulae those be supported default
 ```
 
 ### Cancel (Unmount)
 
 ```man
-usage: publican.py cancel [-h] [--all] [formulae ...]
+usage: publican.py cancel [-h] [-a] [formulae ...]
 
 Unmount your formulae config files.
 
@@ -106,23 +106,23 @@ positional arguments:
 
 optional arguments:
   -h, --help  show this help message and exit
-  --all       manage all of the formulae those be supported default
+  -a, --all   manage all of the formulae those be supported default
 ```
 
 ### Tab (Status)
 
 ```man
-usage: publican.py tab [-h] [--simplify] [--all] [formulae ...]
+usage: publican.py tab [-h] [-s] [-a] [formulae ...]
 
 Show the supported formulae status.
 
 positional arguments:
-  formulae    chose the formulae those you want to manage
+  formulae        chose the formulae those you want to manage
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --simplify  simplifies the output
-  --all       manage all of the formulae those be supported default
+  -h, --help      show this help message and exit
+  -s, --simplify  simplifies the output
+  -a, --all       manage all of the formulae those be supported default
 ```
 
 ## What does it do?

@@ -36,7 +36,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.5"
+VERSION = "1.3.6"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -230,6 +230,7 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
         help="chose the formulae those you want to manage",
     )
     parser.add_argument(
+        "-a",
         "--all",
         action="store_true",
         help="manage all of the formulae those be supported default",
@@ -277,6 +278,7 @@ def add_list_parser(subparsers):
     )
 
     parser.add_argument(
+        "-s",
         "--simplify",
         action="store_true",
         help="simplifies the output",
@@ -462,6 +464,7 @@ def add_status_parser(subparsers):
     )
 
     parser.add_argument(
+        "-s",
         "--simplify",
         action="store_true",
         help="simplifies the output",
