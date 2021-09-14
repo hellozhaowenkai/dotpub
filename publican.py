@@ -25,6 +25,7 @@
 # ==================================================
 
 
+import os
 import json
 import pathlib
 import argparse
@@ -36,7 +37,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.6"
+VERSION = "1.3.7"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -114,6 +115,8 @@ def get_formula_info(formula):
         for (key, value) in path.items():
             assert isinstance(key, str), message
             assert isinstance(value, list), message
+            for sub_value in value:
+                assert isinstance(sub_value, str), message
         # assert jsonschema.validate(formula_info, formula_info_schema), message
 
     except FileNotFoundError:
@@ -171,12 +174,32 @@ def init_backups(formula):
         backup_path.unlink()
 
 
+def path_resolver(path_segments: list[str]):
+    for (index, value) in enumerate(path_segments):
+        if not value.startswith("$"):
+            continue
+
+        if (env_value := os.environ.get(value[1:])) is not None:
+            path_segments[index] = env_value
+        else:
+            log(
+                f"{value}: unknown environment variable, please checkout your path section specified in {FORMULA_INFO_FILENAME}.",
+                logging.WARNING,
+            )
+            return None
+
+    return pathlib.Path(*path_segments).expanduser()
+
+
 def yield_dotfiles(formula):
     counter_dir_path = COUNTER_PATH / formula
     formula_info = get_formula_info(formula)
 
     yielded_dotfiles = set()
     for (pattern, path_segments) in formula_info.get("path", {}).items():
+        if (system_dir_path := path_resolver(path_segments)) is None:
+            continue
+
         for counter_path in counter_dir_path.glob(pattern):
             if counter_path.match(".DS_Store"):
                 continue
@@ -210,7 +233,7 @@ def yield_dotfiles(formula):
 
             yielded_dotfiles.add(counter_path)
 
-            system_path = pathlib.Path(*path_segments, counter_path.name).expanduser()
+            system_path = system_dir_path / counter_path.name
             backup_path = BACKUPS_PATH / formula / counter_path.name
 
             yield {
