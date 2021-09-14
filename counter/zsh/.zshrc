@@ -222,8 +222,8 @@ fi
 # [neofetch](https://github.com/dylanaraps/neofetch/)
 #
 
-# Show information when use iTerm.
-if [[ "$LC_TERMINAL" == "iTerm2" ]]; then
+# Show information when use iTerm, only for local sessions.
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
   neofetch
 fi
 
