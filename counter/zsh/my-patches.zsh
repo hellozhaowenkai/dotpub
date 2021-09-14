@@ -227,7 +227,7 @@ function z-git-organize {
 #
 
 # To install useful key bindings and fuzzy completion.
-alias z-fzf-install="$(brew --prefix)/opt/fzf/install"
+alias z-fzf-install="$HOMEBREW_PREFIX/opt/fzf/install"
 
 #
 # MySQL stuff.
@@ -249,7 +249,7 @@ alias pip="pip3"
 #
 
 # Enable tab completion.
-alias z-poetry-insatll="poetry completions zsh > $(brew --prefix)/share/zsh/site-functions/_poetry"
+alias z-poetry-insatll="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
 
 #
 # Powerlevel10k stuff.

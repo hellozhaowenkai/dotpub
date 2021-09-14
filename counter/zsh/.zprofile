@@ -24,9 +24,11 @@
 # [homebrew](https://brew.sh/)
 #
 
+# Add Homebrew to your PATH.
 if [[ "$(uname -s)" == "Linux" ]]; then
-  # Add Homebrew to your PATH.
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+else
+  eval "$(brew shellenv)"
 fi
 
 #

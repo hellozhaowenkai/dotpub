@@ -114,9 +114,9 @@ source $ZSH/oh-my-zsh.sh
 # ==================================================
 
 # Load plugins installed by Homebrew.
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source $HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $HOMEBREW_PREFIX/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 # Allow Ctrl-P/Ctrl-N for navigate history integrated with zsh-history-substring-search.
 bindkey -M viins "^p" history-substring-search-up
@@ -239,7 +239,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Enable Powerlevel10k theme.
-source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
+source $HOMEBREW_PREFIX/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit `~/.p10k.zsh`.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -256,10 +256,10 @@ source $(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme
 #
 
 # Enable fuzzy auto-completion.
-[[ $- == *i* ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2> /dev/null
+[[ $- == *i* ]] && source "$HOMEBREW_PREFIX/opt/fzf/shell/completion.zsh" 2> /dev/null
 
 # Enable key bindings.
-source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
+source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 
 #
 # [zoxide](https://github.com/ajeetdsouza/zoxide/)
@@ -286,9 +286,9 @@ eval "$(zoxide init zsh)"
 export NVM_DIR="$HOME/.nvm"
 
 # This loads nvm.
-[[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]] && . "$(brew --prefix)/opt/nvm/nvm.sh"
+[[ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]] && . "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
 # This loads nvm bash_completion.
-[[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ]] && . "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm"
+[[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ]] && . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
 
 # Use TaoBao mirror.
 # export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
@@ -298,7 +298,7 @@ export NVM_DIR="$HOME/.nvm"
 #
 
 # Enable tab completion.
-# poetry completions zsh > $(brew --prefix)/share/zsh/site-functions/_poetry
+# poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry
 
 #
 # [pyenv](https://github.com/pyenv/pyenv/)

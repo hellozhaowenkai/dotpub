@@ -27,4 +27,8 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 # add Homebrew to your PATH
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [[ "$(uname -s)" == "Linux" ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+else
+  eval "$(brew shellenv)"
+fi
