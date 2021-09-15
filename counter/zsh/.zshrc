@@ -219,6 +219,23 @@ fi
 # ==================================================
 
 #
+# [homebrew](https://brew.sh/)
+#
+
+# Use TUNA mirror.
+# if [[ "$(uname -s)" == "Linux" ]]; then BREW_TYPE="linuxbrew"; else BREW_TYPE="homebrew"; fi
+# export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+# export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
+# export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles/bottles/"
+
+#
+# [acme.sh](https://acme.sh/)
+#
+
+# Enable alias.
+[[ -s "$HOME/.acme.sh/acme.sh.env" ]] && . "$HOME/.acme.sh/acme.sh.env"
+
+#
 # [neofetch](https://github.com/dylanaraps/neofetch/)
 #
 
@@ -267,16 +284,6 @@ source "$HOMEBREW_PREFIX/opt/fzf/shell/key-bindings.zsh"
 
 # Add zoxide to your shell.
 eval "$(zoxide init zsh)"
-
-#
-# [homebrew](https://brew.sh/)
-#
-
-# Use TUNA mirror.
-# if [[ "$(uname -s)" == "Linux" ]]; then BREW_TYPE="linuxbrew"; else BREW_TYPE="homebrew"; fi
-# export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-# export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/${BREW_TYPE}-core.git"
-# export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/${BREW_TYPE}-bottles/bottles/"
 
 #
 # [nvm](https://github.com/nvm-sh/nvm/)
