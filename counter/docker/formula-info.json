@@ -1,0 +1,9 @@
+{
+  "name": "Docker",
+  "version": "1.0.0",
+  "description": "Pack, ship and run any application as a lightweight container",
+  "website": "https://www.docker.com/",
+  "path": {
+    "*": ["~"]
+  }
+}
