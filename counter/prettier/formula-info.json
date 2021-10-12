@@ -1,6 +1,6 @@
 {
   "name": "Prettier",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Code formatter for JavaScript, CSS, JSON, GraphQL, Markdown, YAML",
   "website": "https://prettier.io/",
   "path": {
