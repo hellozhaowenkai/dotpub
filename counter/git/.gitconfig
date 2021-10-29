@@ -7,8 +7,8 @@
 	editor = vim
 	ignorecase = false
 	autocrlf = input
+	safecrlf = warn
 	excludesfile = ~/.gitignore_global
-	safecrlf = true
 [commit]
 	template = ~/.gitmessage
 [pull]
