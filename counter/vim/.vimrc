@@ -512,7 +512,7 @@ noremap <Leader>x "+d
 noremap <Leader>c "+y
 " Paste form the system clipboard, and don't auto-indent.
 noremap <Leader>v <Leader>p"+p<Leader>p
-noremap! <C-V> <C-R><C-O>+
+noremap! <Leader>v <C-R><C-O>+
 
 " Make the X selection synchronize with the unnamed register.
 noremap <silent> <Leader>xi :call system('xclip -selection clipboard -in', @")<CR>
@@ -536,9 +536,9 @@ nnoremap <Leader>bd :bdelete<CR>
 
 if g:is_nvim
   " Trigger completion.
-  inoremap <silent><expr> <C-Space> coc#refresh()
+  inoremap <silent><expr> <Leader><Tab> coc#refresh()
   " GoTo code navigation.
-  nmap <silent> <Leader>gr <Plug>(coc-references)
+  nmap <silent> <Leader>gt <Plug>(coc-references)
   " Symbol renaming.
   nmap <Leader>rn <Plug>(coc-rename)
 
