@@ -108,11 +108,11 @@ function z-share {
   echo "action: $action"
   case $action {
     (pull)
-      scp -r $host:~/Public/Shared/* ~/Public/Shared/
+      scp -r $host:'%HomePath%/Public/Shared/*' ~/Public/Shared/
       ;;
 
     (push)
-      scp -r ~/Public/Shared/* $host:~/Public/Shared/
+      scp -r ~/Public/Shared/* $host:'%HomePath%/Public/Shared/'
       ;;
 
     (*)
@@ -133,7 +133,7 @@ alias z-git-lfs-install="git lfs install"
 
 # Easy push.
 function z-git-push {
-  local remote_branch=$(date "+%Y%m%d-%H%M%S")
+  local remote_branch=kev-$(date "+%Y%m%d-%H%M%S")
   (($+1)) && remote_branch=$1
 
   echo "remote_branch: $remote_branch"
@@ -174,11 +174,13 @@ function z-git-fetch {
 
 # Easy commit.
 function z-git-commit {
+  local adjust_day=1
+  (($+1)) && adjust_day=$1
   local right_hour=21
-  (($+1)) && right_hour=$1
+  (($+2)) && right_hour=$2
   local right_minute=30
-  (($+2)) && right_minute=$2
-  local right_date=$(date -R -v -1d -v "$right_hour"H -v "$right_minute"M)
+  (($+3)) && right_minute=$3
+  local right_date=$(date -R -v -"$adjust_day"d -v "$right_hour"H -v "$right_minute"M)
 
   [[ -z $right_date ]] && return 1
 
