@@ -76,7 +76,7 @@ optional arguments:
   -a, --all       manage all of the formulae those be supported default
 ```
 
-> Want to work with brew?  
+> Want to work with brew?<br>
 > Try `brew info $(python publican.py menu -as)` now!
 
 ### Order (Mount)

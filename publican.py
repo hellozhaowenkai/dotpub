@@ -37,7 +37,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.7"
+VERSION = "1.3.8"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -136,8 +136,9 @@ def get_formula_info(formula):
 def request_confirm(problem_flag):
     message = """request confirm:
     Y): yes, and do not ask again for same problem anyway.
-    y): yes, do it just for this time.
-    n): no, quit and I will do it by myself.
+    y): yes, do it but just for this time.
+    N): no, exit and I will do it by myself.
+    n): no, ignore it but just for this time.
 (type your answer then press <Enter>): """
     answer = input(message)
 
@@ -146,6 +147,8 @@ def request_confirm(problem_flag):
         return True
     elif answer == "y":
         return True
+    elif answer == "N":
+        exit(0)
     elif answer == "n":
         return False
     else:
@@ -166,7 +169,7 @@ def init_backups(formula):
                 logging.WARNING,
             )
             if not request_confirm(problem_flag):
-                exit(0)
+                return
 
         log(f"{backup_dir_path} is not empty, but empty it anyway.", logging.WARNING)
 
