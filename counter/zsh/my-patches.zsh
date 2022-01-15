@@ -70,9 +70,9 @@ function z-brew-install {
 #
 
 # Private npm registry and web for Company.
-alias z-npm-taobao="npm --registry=https://registry.npm.taobao.org \
-  --cache=$HOME/.npm/.cache/cnpm \
-  --disturl=https://npm.taobao.org/mirrors/node \
+alias z-npm-taobao="npm --registry=https://registry.npmmirror.com \
+  --cache=$HOME/.npm/.cache/cnpm/ \
+  --disturl=https://npmmirror.com/mirrors/node/ \
   --userconfig=$HOME/.cnpmrc"
 
 # Fetch all outdated npm global packages list.

@@ -298,7 +298,7 @@ export NVM_DIR="$HOME/.nvm"
 [[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ]] && . "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
 
 # Use TaoBao mirror.
-# export NVM_NODEJS_ORG_MIRROR="https://npm.taobao.org/mirrors/node/"
+# export NVM_NODEJS_ORG_MIRROR="https://registry.npmmirror.com/binary.html?path=node/"
 
 #
 # [poetry](https://github.com/python-poetry/poetry/)
@@ -312,7 +312,7 @@ export NVM_DIR="$HOME/.nvm"
 #
 
 # Use TaoBao mirror.
-# export PYTHON_BUILD_MIRROR_URL="https://npm.taobao.org/mirrors/python/"
+# export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/binary.html?path=python/"
 # If set, does not append the SHA2 checksum of the file to the mirror URL.
 # export PYTHON_BUILD_MIRROR_URL_SKIP_CHECKSUM=1
 
