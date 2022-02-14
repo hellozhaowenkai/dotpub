@@ -49,7 +49,7 @@ function z-brew-install {
     xcode-select --install
   }
 
-  if [[ $1 == tuna ]] {
+  if [[ $1 == "tuna" ]] {
     # Use TUNA mirror.
     git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git ~/brew-tuna
     /bin/bash ~/brew-tuna/install.sh
@@ -61,6 +61,72 @@ function z-brew-install {
 
   # You’re done! Try installing a package:
   brew install hello
+
+  return 0
+}
+
+# Set TUNA mirror.
+function z-tuna-set {
+  export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+  git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+
+  export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+  if [[ "$(uname -s)" == "Linux" ]] {
+    brew tap --custom-remote --force-auto-update homebrew/core               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
+  } else {
+    brew tap --custom-remote --force-auto-update homebrew/core               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
+    brew tap --custom-remote --force-auto-update homebrew/cask               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-fonts         https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-fonts.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-drivers       https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-drivers.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-versions      https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-versions.git
+    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
+  }
+
+  brew update
+
+  return 0
+}
+
+# Unset TUNA mirror.
+function z-tuna-unset {
+  unset HOMEBREW_BREW_GIT_REMOTE
+  git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew.git
+
+  unset HOMEBREW_CORE_GIT_REMOTE
+  if [[ "$(uname -s)" == "Linux" ]] {
+    brew tap --custom-remote --force-auto-update homebrew/core               https://github.com/Homebrew/homebrew-core.git
+    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found.git
+  } else {
+    brew tap --custom-remote --force-auto-update homebrew/core               https://github.com/Homebrew/homebrew-core.git
+    brew tap --custom-remote --force-auto-update homebrew/cask               https://github.com/Homebrew/homebrew-cask.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-fonts         https://github.com/Homebrew/homebrew-cask-fonts.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-drivers       https://github.com/Homebrew/homebrew-cask-drivers.git
+    brew tap --custom-remote --force-auto-update homebrew/cask-versions      https://github.com/Homebrew/homebrew-cask-versions.git
+    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found.git
+  }
+
+  brew update
+
+  return 0
+}
+
+# Install all my formulae via brew.
+function z-formulae-install {
+  if [[ $1 == "tuna" ]] {
+    export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+    export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+    export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
+  }
+
+  brew update --preinstall
+
+  for formula ($(python publican.py menu -as)) {
+    echo ""
+    echo "installing $formula"
+    brew install $formula
+    echo "done"
+  }
 
   return 0
 }
@@ -81,8 +147,16 @@ alias z-npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
 # Upgrade outdated npm global packages.
 function z-npm-upgrade {
   for package ($(z-npm-update)) {
+    echo ""
     echo "upgrading $package"
-    npm -g install $package
+
+    if [[ $1 == "taobao" ]] {
+      z-npm-taobao -g install $package
+    } else {
+      npm -g install $package
+    }
+
+    echo "done"
   }
 
   return 0
