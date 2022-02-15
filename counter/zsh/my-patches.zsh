@@ -59,7 +59,7 @@ function z-brew-install {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   }
 
-  # You’re done! Try installing a package:
+  # You're done! Try installing a package:
   brew install hello
 
   return 0
@@ -325,7 +325,7 @@ alias pip="pip3"
 #
 
 # Enable tab completion.
-alias z-poetry-insatll="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
+alias z-poetry-install="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
 
 #
 # Powerlevel10k stuff.
