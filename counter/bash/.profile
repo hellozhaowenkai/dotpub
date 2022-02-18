@@ -28,7 +28,14 @@ fi
 
 # add Homebrew to your PATH
 if [[ "$(uname -s)" == "Linux" ]]; then
+  # for Linux
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 else
-  eval "$(brew shellenv)"
+  if [[ "$(uname -m)" == "x86_64" ]]; then
+    # for macOS (Darwin) with Intel CPU (x86_64)
+    eval "$(/usr/local/bin/brew shellenv)"
+  else
+    # for macOS (Darwin) with Apple Silicon CPU (arm64)
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  fi
 fi
