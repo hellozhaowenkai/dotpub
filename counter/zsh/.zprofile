@@ -1,5 +1,5 @@
 # ==================================================
-# `.zprofile' is sourced in login shells, before `.zshrc'.
+# `.zprofile` is sourced in login shells, before `.zshrc`.
 #
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
@@ -7,6 +7,8 @@
 #   Personal preference .zprofile file.
 # Note:
 #   It should contain commands that should be executed only in login shells.
+#   `.zprofile` is similar to `.zlogin`, except that it is sourced before `.zshrc`. `.zprofile` is meant as an alternative
+#   to `.zlogin` for ksh fans; the two are not intended to be used together, although this could certainly be done if desired.
 # Sections:
 #   - Formulae Configuration
 # Repository:

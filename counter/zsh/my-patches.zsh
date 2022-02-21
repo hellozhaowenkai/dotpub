@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ==================================================
-# Such customization `*.zsh' files will be loaded the last.
+# Such customization `*.zsh` files will be loaded the last.
 #
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
@@ -30,7 +30,7 @@
 
 # Installation.
 function z-omz-install {
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   return 0
 }
@@ -68,7 +68,7 @@ function z-brew-install {
 # Set TUNA mirror.
 function z-tuna-set {
   export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-  git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git
+  brew update
 
   export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
   if [[ "$(uname -s)" == "Linux" ]] {
@@ -82,7 +82,6 @@ function z-tuna-set {
     brew tap --custom-remote --force-auto-update homebrew/cask-versions      https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-versions.git
     brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
   }
-
   brew update
 
   return 0
@@ -91,21 +90,20 @@ function z-tuna-set {
 # Unset TUNA mirror.
 function z-tuna-unset {
   unset HOMEBREW_BREW_GIT_REMOTE
-  git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew.git
+  git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
 
   unset HOMEBREW_CORE_GIT_REMOTE
   if [[ "$(uname -s)" == "Linux" ]] {
-    brew tap --custom-remote --force-auto-update homebrew/core               https://github.com/Homebrew/homebrew-core.git
-    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found.git
+    brew tap --custom-remote homebrew/core               https://github.com/Homebrew/homebrew-core
+    brew tap --custom-remote homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found
   } else {
-    brew tap --custom-remote --force-auto-update homebrew/core               https://github.com/Homebrew/homebrew-core.git
-    brew tap --custom-remote --force-auto-update homebrew/cask               https://github.com/Homebrew/homebrew-cask.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-fonts         https://github.com/Homebrew/homebrew-cask-fonts.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-drivers       https://github.com/Homebrew/homebrew-cask-drivers.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-versions      https://github.com/Homebrew/homebrew-cask-versions.git
-    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found.git
+    brew tap --custom-remote homebrew/core               https://github.com/Homebrew/homebrew-core
+    brew tap --custom-remote homebrew/cask               https://github.com/Homebrew/homebrew-cask
+    brew tap --custom-remote homebrew/cask-fonts         https://github.com/Homebrew/homebrew-cask-fonts
+    brew tap --custom-remote homebrew/cask-drivers       https://github.com/Homebrew/homebrew-cask-drivers
+    brew tap --custom-remote homebrew/cask-versions      https://github.com/Homebrew/homebrew-cask-versions
+    brew tap --custom-remote homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found
   }
-
   brew update
 
   return 0
@@ -168,7 +166,7 @@ function z-npm-upgrade {
 
 # Work together with other machines.
 function z-share {
-  local host=dell
+  local host=my-pc
   local action=pull
   if (($+2)) {
     host=$1
@@ -218,18 +216,23 @@ function z-git-push {
 
 # Easy pull.
 function z-git-pull {
-  local remote_branch=master
+  local remote_branch=main
   (($+1)) && remote_branch=$1
 
   echo "remote_branch: $remote_branch"
-  git remote prune origin && git pull --rebase origin $remote_branch:
+  git remote prune origin
+  if [[ $1 == "-f" ]] {
+    git fetch --all && git reset --hard origin/$remote_branch && git pull
+  } else {
+    git pull --rebase origin $remote_branch:
+  }
 
   return 0
 }
 
 # Easy fetch.
 function z-git-fetch {
-  local remote_branch=master
+  local remote_branch=main
   (($+1)) && remote_branch=$1
 
   local local_branch=$(date "+%Y%m%d-%H%M%S")
@@ -367,7 +370,7 @@ alias xssh="open --hide -a XQuartz && ssh -Y"
 
 # Test.
 function z-xssh-test {
-  local host=dell
+  local host=my-vps
   (($+1)) && host=$1
 
   echo "host: $host"

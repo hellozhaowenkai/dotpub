@@ -1,5 +1,5 @@
 # ==================================================
-# `.zshrc' is sourced in interactive shells.
+# `.zshrc` is sourced in interactive shells.
 #
 # Maintainer:
 #   KevInZhao <hellozhaowenkai@gmail.com>
