@@ -1,0 +1,9 @@
+{
+  "name": "Glances",
+  "version": "1.0.0",
+  "description": "Alternative to top/htop",
+  "website": "https://nicolargo.github.io/glances/",
+  "path": {
+    "*": ["~"]
+  }
+}
