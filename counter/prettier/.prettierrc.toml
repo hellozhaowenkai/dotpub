@@ -1,12 +1,16 @@
 # ==================================================
-# Prettier is an opinionated code formatter.
+# An opinionated code formatter.
 #
+# Maintainer:
+#   KevInZhao <hellozhaowenkai@gmail.com>
 # Description:
 #   The configuration file will be resolved starting from the location of the file being formatted,
 #   and searching up the file tree until a config file is (or isn't) found.
 # Note:
 #   If you're asking yourself "Do I need to configure anything?" the answer is "No".
 #   `Prettier` is all about sensible defaults.
+# Repository:
+#   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
 #   - [Prettier](https://prettier.io/)
 #   - [Options](https://prettier.io/docs/en/options.html)

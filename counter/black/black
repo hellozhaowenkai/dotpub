@@ -1,5 +1,5 @@
 # ==================================================
-# Black is the uncompromising Python code formatter.
+# The uncompromising code formatter.
 #
 # Description:
 #   By default Black looks for `pyproject.toml` starting from the common base directory of all files and directories
