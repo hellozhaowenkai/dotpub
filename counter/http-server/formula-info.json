@@ -1,0 +1,9 @@
+{
+  "name": "HTTP Server",
+  "version": "1.0.0",
+  "description": "Simple zero-configuration command-line HTTP server",
+  "website": "https://github.com/http-party/http-server/",
+  "path": {
+    "*": ["~"]
+  }
+}
