@@ -15,8 +15,8 @@
 #   - project
 #   - build-system
 #   - install-system
-#   - tool.black
 #   - tool.poetry
+#   - tool.black
 # Repository:
 #   - [DotPub](https://github.com/hellozhaowenkai/dotpub/)
 # References:
@@ -31,28 +31,7 @@
 #
 
 [project]
-name = "DotPub"
-version = "1.3.7"
-description = "Serve fruity dotfiles for brew fans!"
-maintainers = [{name = "KevInZhao", email = "hellozhaowenkai@gmail.com"}]
-
-keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
-classifiers = ["Environment :: Console", "Intended Audience :: Developers"]
-readme = "README.md"
-
-requires-python = ">=3.9"
-dependencies = []
-
-[project.urls]
-repository = "https://github.com/hellozhaowenkai/dotpub/"
-
-[project.license]
-text = "GNU Affero General Public License, Version 3.0"
-file = "LICENSE"
-
-[project.entry-points]
-run = "publican:main"
-debug = "waiter:main"
+dynamic = []
 
 #
 # The `build-system` table is used to store build-related data.
@@ -68,20 +47,56 @@ build-backend = "poetry.core.masonry.api"
 
 [install-system]
 requires = ["poetry"]
-install-backend = "poetry.console:main"
+install-backend = "poetry.console:run"
 
 #
-# [Black](https://black.readthedocs.io/)
+# The `tool` table is where any tool related to your Python project, not just build tools.
 #
 
-[tool.black]
-line-length = 88
+[tool]
 
 #
 # [Poetry](https://python-poetry.org/)
 #
 
+# [Configurations](https://python-poetry.org/docs/pyproject/)
+[tool.poetry]
+name = "DotPub"
+version = "1.3.8"
+description = "Serve fruity dotfiles for brew fans!"
+
+license = "AGPL-3.0-or-later"
+authors = ["KevInZhao <hellozhaowenkai@gmail.com>"]
+maintainers = ["KevInZhao <hellozhaowenkai@gmail.com>"]
+
+readme = "README.md"
+homepage = "https://github.com/hellozhaowenkai/dotpub/"
+repository = "https://github.com/hellozhaowenkai/dotpub/"
+documentation = "https://github.com/hellozhaowenkai/dotpub/"
+keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
+classifiers = ["Environment :: Console", "Intended Audience :: Developers"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+
 [[tool.poetry.source]]
 default = true
 name = "tuna"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+[tool.poetry.scripts]
+run = "publican:main"
+debug = "waiter:main"
+
+[tool.poetry.urls]
+"bug-tracker" = "https://github.com/hellozhaowenkai/dotpub/issues/"
+
+#
+# [Black](https://black.readthedocs.io/)
+#
+
+# [Configurations](https://black.readthedocs.io/en/stable/compatible_configs.html)
+[tool.black]

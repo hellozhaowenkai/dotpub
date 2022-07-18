@@ -5,6 +5,7 @@
 [![Maintainer](https://img.shields.io/badge/Maintainer-KevInZhao-42b983.svg)](https://github.com/hellozhaowenkai/)
 [![Version](https://img.shields.io/github/v/tag/hellozhaowenkai/dotpub?label=Version)](https://github.com/hellozhaowenkai/dotpub/tags/)
 [![Python](https://img.shields.io/badge/Python-%3E%3D3.9-success)](https://www.python.org/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-black-000000.svg)](https://github.com/psf/black/)
 [![License](https://img.shields.io/github/license/hellozhaowenkai/dotpub?label=License)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
