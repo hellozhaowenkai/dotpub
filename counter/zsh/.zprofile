@@ -44,5 +44,10 @@ fi
 # [pyenv](https://github.com/pyenv/pyenv/)
 #
 
+# Define environment variable PYENV_ROOT to point to the path where Pyenv will store its data.
+export PYENV_ROOT="$HOME/.pyenv"
+# Add the pyenv executable to your PATH if it's not already there.
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+
 # Run the output of `pyenv init --path` to enable shims.
 eval "$(pyenv init --path)"

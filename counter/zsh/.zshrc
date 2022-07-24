@@ -300,15 +300,13 @@ export NVM_DIR="$HOME/.nvm"
 # export NVM_NODEJS_ORG_MIRROR="https://registry.npmmirror.com/binary.html?path=node/"
 
 #
-# [poetry](https://github.com/python-poetry/poetry/)
-#
-
-# Enable tab completion.
-# poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry
-
-#
 # [pyenv](https://github.com/pyenv/pyenv/)
 #
+
+# Define environment variable PYENV_ROOT to point to the path where Pyenv will store its data.
+export PYENV_ROOT="$HOME/.pyenv"
+# Add the pyenv executable to your PATH if it's not already there.
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 
 # Use TaoBao mirror.
 # export PYTHON_BUILD_MIRROR_URL="https://registry.npmmirror.com/binary.html?path=python/"
@@ -321,3 +319,5 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add `pyenv` into your shell by running the output of `pyenv init -` to enable autocompletion and all subcommands.
 eval "$(pyenv init -)"
+# Add `pyenv-virtualenv` to your shell to enable auto-activation of virtualenvs.
+eval "$(pyenv virtualenv-init -)"
