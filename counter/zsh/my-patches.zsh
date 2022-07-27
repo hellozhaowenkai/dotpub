@@ -29,7 +29,7 @@
 #
 
 # Installation.
-function z-omz-install {
+function z-install-omz {
   sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   return 0
@@ -40,7 +40,7 @@ function z-omz-install {
 #
 
 # Installation.
-function z-brew-install {
+function z-install-brew {
   if [[ "$(uname -s)" == "Linux" ]] {
     # Dependencies for Debian or Ubuntu.
     sudo apt-get install build-essential procps curl file git
@@ -66,7 +66,7 @@ function z-brew-install {
 }
 
 # Set TUNA mirror.
-function z-tuna-set {
+function z-set-tuna {
   export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
   brew update
 
@@ -88,7 +88,7 @@ function z-tuna-set {
 }
 
 # Unset TUNA mirror.
-function z-tuna-unset {
+function z-unset-tuna {
   unset HOMEBREW_BREW_GIT_REMOTE
   git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
 
@@ -110,7 +110,7 @@ function z-tuna-unset {
 }
 
 # Install all my formulae via brew.
-function z-formulae-install {
+function z-install-formulae {
   if [[ $1 == "tuna" ]] {
     export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
     export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
@@ -140,7 +140,7 @@ alias z-npm-taobao="npm --registry=https://registry.npmmirror.com \
   --userconfig=$HOME/.cnpmrc"
 
 # Fetch all outdated npm global packages list.
-alias z-npm-update="npm -g outdated --depth=0 --parseable | cut -d: -f2"
+alias z-npm-update="npm outdated --location=global --depth=0 --parseable | cut -d: -f2"
 
 # Upgrade outdated npm global packages.
 function z-npm-upgrade {
@@ -149,9 +149,9 @@ function z-npm-upgrade {
     echo "upgrading $package"
 
     if [[ $1 == "taobao" ]] {
-      z-npm-taobao -g install $package
+      z-npm-taobao install --location=global $package
     } else {
-      npm -g install $package
+      npm install --location=global $package
     }
 
     echo "done"
@@ -166,7 +166,7 @@ function z-npm-upgrade {
 
 # Work together with other machines.
 function z-share {
-  local host=my-pc
+  local host=mac-mini
   local action=pull
   if (($+2)) {
     host=$1
@@ -201,7 +201,7 @@ function z-share {
 #
 
 # Git LFS requires global configuration changes once per-machine.
-alias z-git-lfs-install="git lfs install"
+alias z-install-lfs="git lfs install"
 
 # Easy push.
 function z-git-push {
@@ -306,14 +306,14 @@ function z-git-organize {
 #
 
 # To install useful key bindings and fuzzy completion.
-alias z-fzf-install="$HOMEBREW_PREFIX/opt/fzf/install"
+alias z-set-fzf="$HOMEBREW_PREFIX/opt/fzf/install"
 
 #
 # MySQL stuff.
 #
 
-# Installation.
-alias z-mysql-install="mysql_secure_installation"
+# MySQL initialize.
+alias z-init-mysql="mysql_secure_installation"
 
 #
 # Python stuff.
@@ -328,7 +328,7 @@ alias pip="pip3"
 #
 
 # Anaconda initialize.
-function z-anaconda-init {
+function z-init-anaconda {
   # >>> conda initialize >>>
   # !! Contents within this block are managed by 'conda init' !!
   __conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
@@ -352,20 +352,21 @@ function z-anaconda-init {
 #
 
 # Enable tab completion.
-alias z-poetry-install="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
+alias z-set-poetry="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
 
 #
 # Powerlevel10k stuff.
 #
 
 # Installation for Homebrew.
-alias z-p10k-install="brew install romkatv/powerlevel10k/powerlevel10k"
+alias z-install-p10k="brew install romkatv/powerlevel10k/powerlevel10k"
 
 #
 # .DS_Store stuff.
 #
 
-function z-ds-delete {
+# See [here](https://www.switchingtomac.com/macos/what-is-a-ds_store-file-and-how-to-remove-it/).
+function z-delete-ds {
   if [[ $1 == "" ]] {
     echo "folder: $(pwd), start..."
 
@@ -393,7 +394,7 @@ function z-ds-delete {
 alias xssh="open --hide -a XQuartz && ssh -Y"
 
 # Test.
-function z-xssh-test {
+function z-test-xssh {
   local host=my-vps
   (($+1)) && host=$1
 
