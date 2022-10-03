@@ -5,10 +5,10 @@
 	defaultBranch = main
 [core]
 	editor = vim
-	ignorecase = false
+	ignoreCase = false
 	autocrlf = input
 	safecrlf = warn
-	excludesfile = ~/.gitignore_global
+	excludesFile = ~/.gitignore_global
 [commit]
 	template = ~/.gitmessage
 [pull]
