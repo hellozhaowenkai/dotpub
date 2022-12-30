@@ -249,6 +249,24 @@ function z-git-fetch {
   return 0
 }
 
+# Easy track all branches from all remotes.
+function z-git-track-all {
+  local remote_name=origin
+
+  if [[ $1 == "-m" ]] {
+    # Multiple remotes.
+    git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote_branch; do git branch --track "${remote_branch/\//@}" "$remote_branch"; done
+  } else {
+    # Only one remote by the name of `origin`.
+    git branch -r | grep -v '\->' | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" | while read remote_branch; do git branch --track "${remote_branch#origin/}" "$remote_branch"; done
+  }
+
+  git fetch --all
+  git pull --all
+
+  return 0
+}
+
 # Easy commit.
 function z-git-commit {
   local adjust_day=1
@@ -365,20 +383,24 @@ alias z-install-p10k="brew install romkatv/powerlevel10k/powerlevel10k"
 # .DS_Store stuff.
 #
 
+# See [here](https://support.apple.com/en-us/HT208209/).
+alias z-disable-ds="defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool TRUE"
+alias z-enable-ds="defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool FALSE"
+
 # See [here](https://www.switchingtomac.com/macos/what-is-a-ds_store-file-and-how-to-remove-it/).
 function z-delete-ds {
   if [[ $1 == "" ]] {
     echo "folder: $(pwd), start..."
 
-    # Delete a DS_Store file for a specific folder.
-    find . –name '.DS_Store' –type f –delete
-  } elif [[ $1 == "--all" ]] {
+    # Delete all DS_Store files in the current directory.
+    find . -name '.DS_Store' -type f -depth -print -exec rm {} \;
+  } elif [[ $1 == "--root" ]] {
     echo "folder: /, start..."
 
     # Delete all DS_Store files from your Mac.
-    sudo find / -name '.DS_Store' -depth -exec rm {} \;
+    sudo find / -name '.DS_Store' -type f -depth -print -exec rm {} \;
   } else {
-    echo 'error: only accpet `--all` argument!'
+    echo 'error: only accpet `--root` argument!'
     return 1
   }
 

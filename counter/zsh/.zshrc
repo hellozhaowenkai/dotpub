@@ -155,19 +155,27 @@ setopt MENU_COMPLETE
 export HISTFILE=~/.zsh_history
 # The maximum number of lines contained in the history file.
 export HISTFILESIZE=500
-# The number of commands to remember in the command history.
+# The number of commands that are loaded into memory from the history file.
 export HISTSIZE=500
+# The number of commands that are stored in the zsh history file.
+export SAVEHIST=500
 
 # Add `|` to output redirections in the history.
 setopt HIST_ALLOW_CLOBBER
-# If a new command line being added to the history list duplicates an older one,
-# the older command is removed from the list (even if it is not the previous event).
-setopt HIST_IGNORE_ALL_DUPS
 # Remove superfluous blanks from each command line being added to the history list.
 setopt HIST_REDUCE_BLANKS
-# Remove command lines from the history list when the first character on the line is a space,
-# or when one of the expanded aliases contains a leading space.
+# Remove command lines from the history list when the first character on the line is a space, or when one of the expanded aliases contains a leading space.
 setopt HIST_IGNORE_SPACE
+# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+setopt HIST_FIND_NO_DUPS
+# When writing out the history file, older commands that duplicate newer ones are omitted.
+setopt HIST_SAVE_NO_DUPS
+# If a new command line being added to the history list duplicates an older one, the older command is removed from the list (even if it is not the previous event).
+setopt HIST_IGNORE_ALL_DUPS
+# Save each command's beginning timestamp (in seconds since the epoch) and the duration (in seconds) to the history file.
+setopt EXTENDED_HISTORY
+# This option is a variant of `INC_APPEND_HISTORY` in which, where possible, the history entry is written out to the file after the command is finished, so that the time taken by the command is recorded correctly in the history file in `EXTENDED_HISTORY` format.
+setopt INC_APPEND_HISTORY_TIME
 
 # Disable history when not use iTerm.
 if [[ "$LC_TERMINAL" != "iTerm2" ]]; then
@@ -187,6 +195,7 @@ fi
 
 # You may need to manually set your language environment.
 export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 # You may need to manually set your timezone environment.
 export TZ=Asia/Shanghai
