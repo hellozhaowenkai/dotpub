@@ -130,6 +130,11 @@ Plug 'tpope/vim-vinegar'
 " Enable repeating supported plugin maps with `.`.
 Plug 'tpope/vim-repeat'
 
+" The missing motion for Vim.
+Plug 'justinmk/vim-sneak'
+" Try label-mode for a minimalist alternative to EasyMotion.
+let g:sneak#label = 1
+
 " A Vim plugin to display the indention levels with thin vertical lines.
 Plug 'Yggdroot/indentLine'
 " Change indent char.

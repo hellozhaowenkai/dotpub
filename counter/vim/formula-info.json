@@ -1,6 +1,6 @@
 {
   "name": "Vim",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Vi 'workalike' with many additional features",
   "website": "https://www.vim.org/",
   "path": {
