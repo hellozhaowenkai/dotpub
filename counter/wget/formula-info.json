@@ -1,0 +1,9 @@
+{
+  "name": "Wget",
+  "version": "1.0.0",
+  "description": "Internet file retriever",
+  "website": "https://www.gnu.org/software/wget/",
+  "path": {
+    "*": ["~"]
+  }
+}
