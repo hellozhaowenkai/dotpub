@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Cross-shell prompt for astronauts",
   "website": "https://starship.rs/",
+  "disabled": true,
   "path": {
     "*": ["~", ".config"]
   }

@@ -62,19 +62,20 @@ install-backend = "poetry.console:run"
 # [Configurations](https://python-poetry.org/docs/pyproject/)
 [tool.poetry]
 name = "DotPub"
-version = "1.3.8"
+version = "1.3.9"
 description = "Serve fruity dotfiles for brew fans!"
+keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
+classifiers = ["Environment :: Console", "Intended Audience :: Developers"]
 
 license = "AGPL-3.0-or-later"
 authors = ["KevInZhao <hellozhaowenkai@gmail.com>"]
 maintainers = ["KevInZhao <hellozhaowenkai@gmail.com>"]
 
 readme = "README.md"
-homepage = "https://github.com/hellozhaowenkai/dotpub/"
+homepage = "https://lailai.link/app/dotpub/"
 repository = "https://github.com/hellozhaowenkai/dotpub/"
-documentation = "https://github.com/hellozhaowenkai/dotpub/"
-keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
-classifiers = ["Environment :: Console", "Intended Audience :: Developers"]
+documentation = "https://github.com/hellozhaowenkai/dotpub/#readme"
+urls.bug-tracker = "https://github.com/hellozhaowenkai/dotpub/issues/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -90,9 +91,6 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 [tool.poetry.scripts]
 run = "publican:main"
 debug = "waiter:main"
-
-[tool.poetry.urls]
-"bug-tracker" = "https://github.com/hellozhaowenkai/dotpub/issues/"
 
 #
 # [Black](https://black.readthedocs.io/)

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Python dependency management tool",
   "website": "https://pipenv.pypa.io/",
+  "disabled": true,
   "path": {
     "*": ["~"]
   }

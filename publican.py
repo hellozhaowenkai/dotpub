@@ -37,7 +37,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.8"
+VERSION = "1.3.9"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -59,13 +59,18 @@ LOGS_FILENAME = "dotpub.log"
 LOGGER = logging.getLogger()
 SIMPLIFY = False
 NORMAL = -1
+LEFT_JUST_WIDTH = 15
 
-ANSWERS = {"init_backups": False}
+ANSWERS = {"init_backups": None}
 
 
 # ==================================================
 # Utilities
 # ==================================================
+
+
+class ProgramError(Exception):
+    pass
 
 
 def log(message, level=NORMAL, disabled=False):
@@ -98,7 +103,7 @@ def get_target_formulae(args):
         return right
 
     log("please chose at last one formula to manage.", logging.ERROR)
-    exit(1)
+    raise ProgramError()
 
 
 def get_formula_info(formula):
@@ -130,30 +135,36 @@ def get_formula_info(formula):
 
     else:
         return formula_info
-    return exit(1)
+
+    raise ProgramError()
 
 
-def request_confirm(problem_flag):
+def request_confirm(question_flag):
     message = """request confirm:
-    Y): yes, and do not ask again for same problem anyway.
+    Y): yes, do it and no need asking again for the same question anyway.
     y): yes, do it but just for this time.
-    N): no, exit and I will do it by myself.
-    n): no, ignore it but just for this time.
+    N): no, don't do it and no need asking again for the same question anyway.
+    n): no, don't do it but just for this time.
+    exit): exit, I will check it by myself.
 (type your answer then press <Enter>): """
     answer = input(message)
 
-    if answer == "Y":
-        ANSWERS[problem_flag] = True
+    if answer == "exit":
+        log(f"program exited by user.", logging.INFO)
+        exit(0)
+    elif answer == "Y":
+        ANSWERS[question_flag] = True
         return True
     elif answer == "y":
         return True
     elif answer == "N":
-        exit(0)
+        ANSWERS[question_flag] = False
+        return False
     elif answer == "n":
         return False
     else:
         log(f"{answer}: unknown input, please type again.", logging.WARNING)
-        return request_confirm(problem_flag)
+        return request_confirm(question_flag)
 
 
 def init_backups(formula):
@@ -162,16 +173,16 @@ def init_backups(formula):
     backup_paths = list(backup_dir_path.iterdir())
 
     if len(backup_paths) > 0:
-        problem_flag = "init_backups"
-        if not ANSWERS[problem_flag]:
-            log(
-                f"{backup_dir_path} is not empty, do you want to empty it anyway?",
-                logging.WARNING,
-            )
-            if not request_confirm(problem_flag):
-                return
+        question_flag = "init_backups"
+        log(f"question: {backup_dir_path} is not empty, do you want to empty it anyway?", logging.WARNING)
+        if ANSWERS[question_flag] is None:
+            answer = request_confirm(question_flag)
+        else:
+            answer = ANSWERS[question_flag]
+        log(f"answer: {'yes' if answer else 'no'}.", logging.INFO)
 
-        log(f"{backup_dir_path} is not empty, but empty it anyway.", logging.WARNING)
+        if not answer:
+            return
 
     for backup_path in backup_paths:
         backup_path.unlink()
@@ -194,9 +205,8 @@ def path_resolver(path_segments: list[str]):
     return pathlib.Path(*path_segments).expanduser()
 
 
-def yield_dotfiles(formula):
+def yield_dotfiles(formula, formula_info):
     counter_dir_path = COUNTER_PATH / formula
-    formula_info = get_formula_info(formula)
 
     yielded_dotfiles = set()
     for (pattern, path_segments) in formula_info.get("path", {}).items():
@@ -273,8 +283,6 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
         if post_processor is not None:
             post_processor(args)
 
-        exit(0)
-
     parser.set_defaults(formulae=[], handler=handler)
     return parser
 
@@ -288,8 +296,12 @@ def list_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
 
     formula_info = get_formula_info(formula)
+
+    if formula_info.get("disabled", False):
+        log(f"disabled:".ljust(LEFT_JUST_WIDTH) + "True", logging.ERROR, True)
+
     for info in ["name", "version", "description", "website"]:
-        print(f"{info}:".ljust(15), formula_info.get(info, "Not found."))
+        print(f"{info}:".ljust(LEFT_JUST_WIDTH) + formula_info.get(info, "Not found."))
 
     print("")
 
@@ -351,10 +363,19 @@ def mount_dotfile(counter, system, backup=None):
 
 def mount_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
+
+    formula_info = get_formula_info(formula)
+
+    if formula_info.get("disabled", False):
+        log(f"disabled:".ljust(LEFT_JUST_WIDTH) + "True", logging.ERROR, True)
+        log(f"this formula `{formula}` is disabled.", logging.WARNING)
+        print("")
+        return
+
     log(f"{formula}: mount start...", logging.INFO)
 
     init_backups(formula)
-    for config in yield_dotfiles(formula):
+    for config in yield_dotfiles(formula, formula_info):
         mount_dotfile(config["counter"], config["system"], config["backup"])
 
     log(f"{formula}: mount done.", logging.INFO)
@@ -403,9 +424,18 @@ def unmount_dotfile(counter, system, backup=None):
 
 def unmount_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
+
+    formula_info = get_formula_info(formula)
+
+    if formula_info.get("disabled", False):
+        log(f"disabled:".ljust(LEFT_JUST_WIDTH) + "True", logging.ERROR, True)
+        log(f"this formula `{formula}` is disabled.", logging.WARNING)
+        print("")
+        return
+
     log(f"{formula}: unmount start...", logging.INFO)
 
-    for config in yield_dotfiles(formula):
+    for config in yield_dotfiles(formula, formula_info):
         unmount_dotfile(config["counter"], config["system"], config["backup"])
     init_backups(formula)
 
@@ -432,21 +462,19 @@ def add_unmount_parser(subparsers):
 
 
 def status_dotfile(counter, system, backup=None):
-    width = 10
-
-    print("@", "dotfile:".ljust(width), end="")
+    print(r"@ dotfile:".ljust(LEFT_JUST_WIDTH), end="")
     print(counter.name)
 
-    print("#", "counter:".ljust(width), end="")
+    print(r"# counter:".ljust(LEFT_JUST_WIDTH), end="")
     if not SIMPLIFY:
         print(counter)
-        print("#", "status:".ljust(width), end="")
+        print(r"# status:".ljust(LEFT_JUST_WIDTH), end="")
     log("enabled", logging.INFO, True)
 
-    print("$", "system:".ljust(width), end="")
+    print(r"$ system:".ljust(LEFT_JUST_WIDTH), end="")
     if not SIMPLIFY:
         print(system)
-        print("$", "status:".ljust(width), end="")
+        print(r"$ status:".ljust(LEFT_JUST_WIDTH), end="")
     if system.is_symlink() or system.is_file():
         if system.resolve() == counter:
             log("mounted", logging.INFO, True)
@@ -457,10 +485,10 @@ def status_dotfile(counter, system, backup=None):
     else:
         log("not-exists", logging.WARNING, True)
 
-    print("%", "backup:".ljust(width), end="")
+    print(r"% backup:".ljust(LEFT_JUST_WIDTH), end="")
     if not SIMPLIFY:
         print(backup)
-        print("%", "status:".ljust(width), end="")
+        print(r"% status:".ljust(LEFT_JUST_WIDTH), end="")
     if backup.is_symlink() or backup.is_file():
         log("backed-up", logging.INFO, True)
     elif backup.exists():
@@ -474,7 +502,13 @@ def status_dotfile(counter, system, backup=None):
 def status_formula(formula):
     log(f"{FORMULA_FLAG} {formula}")
 
-    for config in yield_dotfiles(formula):
+    formula_info = get_formula_info(formula)
+
+    if formula_info.get("disabled", False):
+        log(f"disabled:".ljust(LEFT_JUST_WIDTH) + "True", logging.ERROR, True)
+    print("")
+
+    for config in yield_dotfiles(formula, formula_info):
         status_dotfile(config["counter"], config["system"], config["backup"])
 
     print("")
@@ -568,4 +602,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("")
+        log(f"program interrupted by user.", logging.ERROR)
+        exit(1)
+    except ProgramError:
+        log(f"program exited by self.", logging.ERROR)
+        exit(1)
+    else:
+        exit(0)
