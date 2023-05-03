@@ -62,7 +62,7 @@ install-backend = "poetry.console:run"
 # [Configurations](https://python-poetry.org/docs/pyproject/)
 [tool.poetry]
 name = "DotPub"
-version = "1.3.9"
+version = "1.4.0"
 description = "Serve fruity dotfiles for brew fans!"
 keywords = ["dotfiles", "homebrew", "vimrc", "zshrc"]
 classifiers = ["Environment :: Console", "Intended Audience :: Developers"]

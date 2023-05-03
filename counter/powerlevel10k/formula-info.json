@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A Zsh Theme",
   "website": "https://github.com/romkatv/powerlevel10k/",
+  "bottle": "romkatv/powerlevel10k/powerlevel10k",
   "path": {
     "*": ["~"]
   }

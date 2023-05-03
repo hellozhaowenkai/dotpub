@@ -29,6 +29,7 @@ import os
 import json
 import pathlib
 import argparse
+import subprocess
 import logging
 
 
@@ -37,7 +38,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.3.9"
+VERSION = "1.4.0"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -55,13 +56,15 @@ SUPPORTED_FORMULAE = sorted(
 
 LOGS_DIRNAME = "logs"
 LOGS_PATH = ROOT_PATH / LOGS_DIRNAME
-LOGS_FILENAME = "dotpub.log"
+LOGS_FILENAME = "receipt.log"
 LOGGER = logging.getLogger()
 SIMPLIFY = False
 NORMAL = -1
 LEFT_JUST_WIDTH = 15
 
-ANSWERS = {"init_backups": None}
+ANSWERS = {"force_manage": None, "init_backups": None}
+
+BREW_COMMAND = "info"
 
 
 # ==================================================
@@ -261,7 +264,7 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
         "formulae",
         type=str,
         nargs="*",
-        metavar="formulae",
+        metavar="FORMULAE",
         # choices=SUPPORTED_FORMULAE,
         help="chose the formulae those you want to manage",
     )
@@ -284,6 +287,99 @@ def build_common_cmd(parser, action, pre_processor=None, post_processor=None):
             post_processor(args)
 
     parser.set_defaults(formulae=[], handler=handler)
+    return parser
+
+
+# ==================================================
+# Brew Command
+# ==================================================
+
+
+def manage_formula(formula):
+    log(f"{FORMULA_FLAG} {formula}")
+
+    formula_info = get_formula_info(formula)
+
+    if formula_info.get("disabled", False):
+        log(f"disabled:".ljust(LEFT_JUST_WIDTH) + "True", logging.ERROR, True)
+        log(f"this formula `{formula}` is disabled.", logging.WARNING)
+        print("")
+        return
+
+    cmd = ["brew", BREW_COMMAND, formula_info.get("bottle", formula)]
+
+    question_flag = "force_manage"
+    log(f"question: `{' '.join(cmd)}`, do you want to execute it?", logging.WARNING)
+    if ANSWERS[question_flag] is None:
+        answer = request_confirm(question_flag)
+    else:
+        answer = ANSWERS[question_flag]
+    log(f"answer: {'yes' if answer else 'no'}.", logging.WARNING)
+
+    if not answer:
+        print("")
+        return
+
+    try:
+        completed_process = subprocess.run(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=True,
+            timeout=1 * 60 * 60,
+        )
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+        log(f"manage error.", logging.ERROR)
+        if not SIMPLIFY:
+            print(e.stdout, end="")
+    else:
+        log(f"manage done.", logging.INFO)
+        if not SIMPLIFY:
+            print(completed_process.stdout, end="")
+    finally:
+        print("")
+
+
+def add_manage_parser(subparsers):
+    """Create the parser for the `brew` command."""
+
+    parser = subparsers.add_parser(
+        "brew",
+        description="Manage the supported formulae via brew.",
+        help="manage the supported formulae via brew",
+    )
+
+    parser.add_argument(
+        "command",
+        type=str,
+        metavar="COMMAND",
+        help="command supported by brew",
+    )
+    parser.add_argument(
+        "-s",
+        "--simplify",
+        action="store_true",
+        help="simplifies the output",
+    )
+    parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        help="manage formulae without asking for confirm",
+    )
+
+    def pre_processor(args):
+        global BREW_COMMAND
+        BREW_COMMAND = args.command
+
+        global SIMPLIFY
+        SIMPLIFY = args.simplify
+
+        if args.force:
+            ANSWERS["force_manage"] = True
+
+    parser = build_common_cmd(parser, manage_formula, pre_processor=pre_processor)
     return parser
 
 
@@ -548,7 +644,7 @@ def init_sub_parser(parser):
 
     subparsers = parser.add_subparsers(
         title="subcommands",
-        metavar="action",
+        metavar="ACTION",
         description="Chose the action you want to execute.",
     )
     return subparsers
@@ -591,6 +687,7 @@ def main():
     parser = init_top_parser()
     subparsers = init_sub_parser(parser)
 
+    add_manage_parser(subparsers)
     add_list_parser(subparsers)
     add_mount_parser(subparsers)
     add_unmount_parser(subparsers)

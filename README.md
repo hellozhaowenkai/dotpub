@@ -4,8 +4,9 @@
 
 [![Maintainer](https://img.shields.io/badge/Maintainer-KevInZhao-42b983.svg)](https://github.com/hellozhaowenkai/)
 [![Version](https://img.shields.io/github/v/tag/hellozhaowenkai/dotpub?label=Version)](https://github.com/hellozhaowenkai/dotpub/tags/)
-[![Python](https://img.shields.io/badge/Python-%3E%3D3.9-success)](https://www.python.org/)
-[![Code Style](https://img.shields.io/badge/Code%20Style-black-000000.svg)](https://github.com/psf/black/)
+[![Python](https://img.shields.io/badge/Python-%3E%3D3.9-success.svg)](https://www.python.org/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-Black-000000.svg)](https://github.com/psf/black/)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-fe5196.svg)](https://conventionalcommits.org/)
 [![License](https://img.shields.io/github/license/hellozhaowenkai/dotpub?label=License)](LICENSE)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
@@ -43,7 +44,7 @@ python publican.py order --all
 ## Usage
 
 ```man
-usage: publican.py [-h] [-v] action ...
+usage: publican.py [-h] [-v] ACTION ...
 
 Serve fruity dotfiles for brew fans!
 
@@ -54,22 +55,41 @@ optional arguments:
 subcommands:
   Chose the action you want to execute.
 
-  action
+  ACTION
+    brew         manage the supported formulae via brew
     menu         list the supported formulae
     order        mount your formulae config files
     cancel       unmount your formulae config files
     tab          show the supported formulae status
 ```
 
+### Brew (Manage)
+
+```man
+usage: publican.py brew [-h] [-s] [-f] [-a] COMMAND [FORMULAE ...]
+
+Manage the supported formulae via brew.
+
+positional arguments:
+  COMMAND         command supported by brew
+  FORMULAE        chose the formulae those you want to manage
+
+optional arguments:
+  -h, --help      show this help message and exit
+  -s, --simplify  simplifies the output
+  -f, --force     manage formulae without asking for confirm
+  -a, --all       manage all of the formulae those be supported default
+```
+
 ### Menu (List)
 
 ```man
-usage: publican.py menu [-h] [-s] [-a] [formulae ...]
+usage: publican.py menu [-h] [-s] [-a] [FORMULAE ...]
 
 List the supported formulae.
 
 positional arguments:
-  formulae        chose the formulae those you want to manage
+  FORMULAE        chose the formulae those you want to manage
 
 optional arguments:
   -h, --help      show this help message and exit
@@ -77,18 +97,15 @@ optional arguments:
   -a, --all       manage all of the formulae those be supported default
 ```
 
-> Want to work with brew?<br>
-> Try `brew info $(python publican.py menu -as)` now!
-
 ### Order (Mount)
 
 ```man
-usage: publican.py order [-h] [-a] [formulae ...]
+usage: publican.py order [-h] [-a] [FORMULAE ...]
 
 Mount your formulae config files.
 
 positional arguments:
-  formulae    chose the formulae those you want to manage
+  FORMULAE    chose the formulae those you want to manage
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -98,12 +115,12 @@ optional arguments:
 ### Cancel (Unmount)
 
 ```man
-usage: publican.py cancel [-h] [-a] [formulae ...]
+usage: publican.py cancel [-h] [-a] [FORMULAE ...]
 
 Unmount your formulae config files.
 
 positional arguments:
-  formulae    chose the formulae those you want to manage
+  FORMULAE    chose the formulae those you want to manage
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -113,12 +130,12 @@ optional arguments:
 ### Tab (Status)
 
 ```man
-usage: publican.py tab [-h] [-s] [-a] [formulae ...]
+usage: publican.py tab [-h] [-s] [-a] [FORMULAE ...]
 
 Show the supported formulae status.
 
 positional arguments:
-  formulae        chose the formulae those you want to manage
+  FORMULAE        chose the formulae those you want to manage
 
 optional arguments:
   -h, --help      show this help message and exit
