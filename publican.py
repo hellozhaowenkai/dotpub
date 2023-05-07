@@ -38,7 +38,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.4.0"
+VERSION = "1.4.1"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -368,6 +368,11 @@ def add_manage_parser(subparsers):
         action="store_true",
         help="manage formulae without asking for confirm",
     )
+    parser.add_argument(
+        "--auto-update",
+        action="store_true",
+        help="run on auto-updates (e.g. before brew install) to skips some slower steps",
+    )
 
     def pre_processor(args):
         global BREW_COMMAND
@@ -378,6 +383,11 @@ def add_manage_parser(subparsers):
 
         if args.force:
             ANSWERS["force_manage"] = True
+
+        if args.auto_update:
+            cmd = ["brew", "update",  "--auto-update"]
+            log(f"`{' '.join(cmd)}`, execute it now.", logging.INFO)
+            subprocess.run(cmd)
 
     parser = build_common_cmd(parser, manage_formula, pre_processor=pre_processor)
     return parser

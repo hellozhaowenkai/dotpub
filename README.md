@@ -66,7 +66,7 @@ subcommands:
 ### Brew (Manage)
 
 ```man
-usage: publican.py brew [-h] [-s] [-f] [-a] COMMAND [FORMULAE ...]
+usage: publican.py brew [-h] [-s] [-f] [--auto-update] [-a] COMMAND [FORMULAE ...]
 
 Manage the supported formulae via brew.
 
@@ -78,6 +78,7 @@ optional arguments:
   -h, --help      show this help message and exit
   -s, --simplify  simplifies the output
   -f, --force     manage formulae without asking for confirm
+  --auto-update   run on auto-updates (e.g. before brew install) to skips some slower steps
   -a, --all       manage all of the formulae those be supported default
 ```
 
