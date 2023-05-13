@@ -228,15 +228,6 @@ fi
 # ==================================================
 
 #
-# [homebrew](https://brew.sh/)
-#
-
-# Use TUNA mirror.
-# export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-# export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-# export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
-
-#
 # [acme.sh](https://acme.sh/)
 #
 
@@ -268,13 +259,6 @@ source $HOMEBREW_PREFIX/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit `~/.p10k.zsh`.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-#
-# [starship](https://starship.rs/)
-#
-
-# Add init scripts.
-# eval "$(starship init zsh)"
 
 #
 # [fzf](https://github.com/junegunn/fzf/)

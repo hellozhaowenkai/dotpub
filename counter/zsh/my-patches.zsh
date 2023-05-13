@@ -30,7 +30,7 @@
 
 # Installation.
 function z-install-omz {
-  sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
   return 0
 }
@@ -38,6 +38,17 @@ function z-install-omz {
 #
 # Homebrew stuff.
 #
+
+# Use TUNA mirror.
+function z-use-tuna {
+  export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api/"
+  export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
+  export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+  export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+  export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+  return 0
+}
 
 # Installation.
 function z-install-brew {
@@ -50,81 +61,14 @@ function z-install-brew {
   }
 
   if [[ $1 == "tuna" ]] {
-    # Use TUNA mirror.
-    git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git ~/brew-tuna
-    /bin/bash ~/brew-tuna/install.sh
-    rm -rf ~/brew-tuna
-  } else {
-    # The script explains what it will do and then pauses before it does it.
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    z-use-tuna
   }
+
+  # The script explains what it will do and then pauses before it does it.
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   # You're done! Try installing a package:
   brew install hello
-
-  return 0
-}
-
-# Set TUNA mirror.
-function z-set-tuna {
-  export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-  brew update
-
-  export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-  if [[ "$(uname -s)" == "Linux" ]] {
-    brew tap --custom-remote --force-auto-update homebrew/core               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
-    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
-  } else {
-    brew tap --custom-remote --force-auto-update homebrew/core               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git
-    brew tap --custom-remote --force-auto-update homebrew/cask               https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-fonts         https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-fonts.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-drivers       https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-drivers.git
-    brew tap --custom-remote --force-auto-update homebrew/cask-versions      https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask-versions.git
-    brew tap --custom-remote --force-auto-update homebrew/command-not-found  https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
-  }
-  brew update
-
-  return 0
-}
-
-# Unset TUNA mirror.
-function z-unset-tuna {
-  unset HOMEBREW_BREW_GIT_REMOTE
-  git -C "$(brew --repo)" remote set-url origin https://github.com/Homebrew/brew
-
-  unset HOMEBREW_CORE_GIT_REMOTE
-  if [[ "$(uname -s)" == "Linux" ]] {
-    brew tap --custom-remote homebrew/core               https://github.com/Homebrew/homebrew-core
-    brew tap --custom-remote homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found
-  } else {
-    brew tap --custom-remote homebrew/core               https://github.com/Homebrew/homebrew-core
-    brew tap --custom-remote homebrew/cask               https://github.com/Homebrew/homebrew-cask
-    brew tap --custom-remote homebrew/cask-fonts         https://github.com/Homebrew/homebrew-cask-fonts
-    brew tap --custom-remote homebrew/cask-drivers       https://github.com/Homebrew/homebrew-cask-drivers
-    brew tap --custom-remote homebrew/cask-versions      https://github.com/Homebrew/homebrew-cask-versions
-    brew tap --custom-remote homebrew/command-not-found  https://github.com/Homebrew/homebrew-command-not-found
-  }
-  brew update
-
-  return 0
-}
-
-# Install all my formulae via brew.
-function z-install-formulae {
-  if [[ $1 == "tuna" ]] {
-    export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-    export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-    export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
-  }
-
-  brew update --preinstall
-
-  for formula ($(python publican.py menu -as)) {
-    echo ""
-    echo "installing $formula"
-    brew install $formula
-    echo "done"
-  }
 
   return 0
 }
@@ -134,7 +78,7 @@ function z-install-formulae {
 #
 
 # Private npm registry and web for Company.
-alias z-npm-taobao="npm --registry=https://registry.npmmirror.com \
+alias z-npm-taobao="npm --registry=https://registry.npmmirror.com/ \
   --cache=$HOME/.npm/.cache/cnpm/ \
   --disturl=https://npmmirror.com/mirrors/node/ \
   --userconfig=$HOME/.cnpmrc"
@@ -166,7 +110,7 @@ function z-npm-upgrade {
 
 # Work together with other machines.
 function z-share {
-  local host=mac-mini
+  local host=my-vps
   local action=pull
   if (($+2)) {
     host=$1
@@ -201,7 +145,7 @@ function z-share {
 #
 
 # Git LFS requires global configuration changes once per-machine.
-alias z-install-lfs="git lfs install"
+alias z-lfs-init="git lfs install"
 
 # Easy push.
 function z-git-push {
@@ -337,7 +281,7 @@ alias z-init-mysql="mysql_secure_installation"
 # Python stuff.
 #
 
-# Say good bye to Pyhton 2.
+# Say goodbye to Python 2.
 alias python="python3"
 alias pip="pip3"
 
@@ -371,13 +315,6 @@ function z-init-anaconda {
 
 # Enable tab completion.
 alias z-set-poetry="poetry completions zsh > $HOMEBREW_PREFIX/share/zsh/site-functions/_poetry"
-
-#
-# Powerlevel10k stuff.
-#
-
-# Installation for Homebrew.
-alias z-install-p10k="brew install romkatv/powerlevel10k/powerlevel10k"
 
 #
 # .DS_Store stuff.
