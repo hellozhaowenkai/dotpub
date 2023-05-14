@@ -38,7 +38,7 @@ import logging
 # ==================================================
 
 
-VERSION = "1.4.1"
+VERSION = "1.4.2"
 
 ROOT_PATH = pathlib.Path(__file__).resolve().parent
 
@@ -65,6 +65,7 @@ LEFT_JUST_WIDTH = 15
 ANSWERS = {"force_manage": None, "init_backups": None}
 
 BREW_COMMAND = "info"
+USE_TUNA_MIRROR = False
 
 
 # ==================================================
@@ -89,6 +90,19 @@ def log(message, level=NORMAL, disabled=False):
     print(f"\033[3{color_map[level]}m", end="", flush=True)
     print(message) if (level <= NORMAL or disabled) else LOGGER.log(level, message)
     print("\033[0m", end="", flush=True)
+
+
+def get_brew_env():
+    my_env = os.environ.copy()
+
+    if USE_TUNA_MIRROR:
+        my_env["HOMEBREW_API_DOMAIN"] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api/"
+        my_env["HOMEBREW_BOTTLE_DOMAIN"] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
+        my_env["HOMEBREW_BREW_GIT_REMOTE"] =  "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+        my_env["HOMEBREW_CORE_GIT_REMOTE"] =  "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+        my_env["HOMEBREW_PIP_INDEX_URL"] = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+
+    return my_env
 
 
 def get_target_formulae(args):
@@ -323,6 +337,7 @@ def manage_formula(formula):
     try:
         completed_process = subprocess.run(
             cmd,
+            env=get_brew_env(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -369,6 +384,11 @@ def add_manage_parser(subparsers):
         help="manage formulae without asking for confirm",
     )
     parser.add_argument(
+        "--use-tuna-mirror",
+        action="store_true",
+        help="use TUNA mirror for brew commonds",
+    )
+    parser.add_argument(
         "--auto-update",
         action="store_true",
         help="run on auto-updates (e.g. before brew install) to skips some slower steps",
@@ -384,10 +404,13 @@ def add_manage_parser(subparsers):
         if args.force:
             ANSWERS["force_manage"] = True
 
+        global USE_TUNA_MIRROR
+        USE_TUNA_MIRROR = args.use_tuna_mirror
+
         if args.auto_update:
             cmd = ["brew", "update",  "--auto-update"]
             log(f"`{' '.join(cmd)}`, execute it now.", logging.INFO)
-            subprocess.run(cmd)
+            subprocess.run(cmd, env=get_brew_env())
 
     parser = build_common_cmd(parser, manage_formula, pre_processor=pre_processor)
     return parser
