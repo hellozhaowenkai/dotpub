@@ -96,10 +96,18 @@ def get_brew_env():
     my_env = os.environ.copy()
 
     if USE_TUNA_MIRROR:
-        my_env["HOMEBREW_API_DOMAIN"] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api/"
-        my_env["HOMEBREW_BOTTLE_DOMAIN"] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
-        my_env["HOMEBREW_BREW_GIT_REMOTE"] =  "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-        my_env["HOMEBREW_CORE_GIT_REMOTE"] =  "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+        my_env[
+            "HOMEBREW_API_DOMAIN"
+        ] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api/"
+        my_env[
+            "HOMEBREW_BOTTLE_DOMAIN"
+        ] = "https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/"
+        my_env[
+            "HOMEBREW_BREW_GIT_REMOTE"
+        ] = "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+        my_env[
+            "HOMEBREW_CORE_GIT_REMOTE"
+        ] = "https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
         my_env["HOMEBREW_PIP_INDEX_URL"] = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 
     return my_env
@@ -134,7 +142,7 @@ def get_formula_info(formula):
         message = "`path` should be a dict whit a glob pattern as key and a pathlike list as value"
         path = formula_info["path"]
         assert isinstance(path, dict), message
-        for (key, value) in path.items():
+        for key, value in path.items():
             assert isinstance(key, str), message
             assert isinstance(value, list), message
             for sub_value in value:
@@ -191,7 +199,10 @@ def init_backups(formula):
 
     if len(backup_paths) > 0:
         question_flag = "init_backups"
-        log(f"question: {backup_dir_path} is not empty, do you want to empty it anyway?", logging.WARNING)
+        log(
+            f"question: {backup_dir_path} is not empty, do you want to empty it anyway?",
+            logging.WARNING,
+        )
         if ANSWERS[question_flag] is None:
             answer = request_confirm(question_flag)
         else:
@@ -206,7 +217,7 @@ def init_backups(formula):
 
 
 def path_resolver(path_segments: list[str]):
-    for (index, value) in enumerate(path_segments):
+    for index, value in enumerate(path_segments):
         if not value.startswith("$"):
             continue
 
@@ -226,7 +237,7 @@ def yield_dotfiles(formula, formula_info):
     counter_dir_path = COUNTER_PATH / formula
 
     yielded_dotfiles = set()
-    for (pattern, path_segments) in formula_info.get("path", {}).items():
+    for pattern, path_segments in formula_info.get("path", {}).items():
         if (system_dir_path := path_resolver(path_segments)) is None:
             continue
 
@@ -408,7 +419,7 @@ def add_manage_parser(subparsers):
         USE_TUNA_MIRROR = args.use_tuna_mirror
 
         if args.auto_update:
-            cmd = ["brew", "update",  "--auto-update"]
+            cmd = ["brew", "update", "--auto-update"]
             log(f"`{' '.join(cmd)}`, execute it now.", logging.INFO)
             subprocess.run(cmd, env=get_brew_env())
 

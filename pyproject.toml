@@ -81,12 +81,16 @@ urls.bug-tracker = "https://github.com/hellozhaowenkai/dotpub/issues/"
 python = "^3.9"
 
 [tool.poetry.dev-dependencies]
-black = "^22.6.0"
+black = "^23.3.0"
 
 [[tool.poetry.source]]
-default = true
-name = "tuna"
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
+name = "TUNA"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+priority = "supplemental"
 
 [tool.poetry.scripts]
 run = "publican:main"
