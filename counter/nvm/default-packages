@@ -1,5 +1,6 @@
-@vue/cli
-eslint
 npm-check-updates
-prettier
 typescript
+eslint
+prettier
+@vue/cli
+create-vue

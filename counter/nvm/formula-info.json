@@ -1,6 +1,6 @@
 {
   "name": "Node Version Manager",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Manage multiple Node.js versions",
   "website": "https://github.com/nvm-sh/nvm/",
   "path": {
